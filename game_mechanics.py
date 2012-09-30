@@ -16,7 +16,7 @@ SHAPES_QUEUE_SIZE = 1
 direction_d = { "left": (-1, 0), "right": (1, 0), "down": (0, 1) }
 
 from shapes import *
-from gui import GameWindow
+from gui import GameWindow, BoardCanvas
 from board import Board
 
 #lookup table
@@ -25,13 +25,13 @@ shapes = [square_shape, t_shape, l_shape, reverse_l_shape, z_shape, s_shape, i_s
 shapes_queue = []
 
 for _ in range(SHAPES_QUEUE_SIZE): # initialize the queue
-    shapes_queue.append(random.choice(shapes))
+    shapes_queue.append(random.choice(shapes)())
 
 def get_next_shape_in_queue():
     """
     Returns the next shape in the queue, and puts another shape into the queue
     """
-    shapes_queue.append(random.choice(shapes))
+    shapes_queue.append(random.choice(shapes)())
     print "Queued shape is {0}".format(shapes_queue[-1])
     return shapes_queue.pop(0)
 
@@ -59,53 +59,80 @@ class game_controller(object):
         self.score = 0
         self.level = 0
         self.delay = 1000    #ms
-
         self.thresholds = level_thresholds(500, NO_OF_LEVELS)
-
-        self.game_window = GameWindow(tk_root, self)
-
-        self.board = Board(
-            tk_root,
-            scale=SCALE,
-            max_x=MAXX,
-            max_y=MAXY,
-            offset=OFFSET
-        )
-
+        self.board = Board(max_x=MAXX, max_y=MAXY)
         self.game_over = False
         self.shape = self.get_next_shape()
+
+        self.game_window = GameWindow(tk_root, self)
+        self.board_canvas = BoardCanvas(tk_root, self.board, SCALE, OFFSET)
+        self.update_display()
+
         self.after_id = self.game_window.parent.after(self.delay, self.move_my_shape)
 
+    def new_positions(self, direction):
+        """
+        Get new positions of shape after it has moved in a direction
+        """
+        dx, dy = direction_d[direction]
+        block_positions = []
+
+        for (x, y) in self.shape.coords:
+            block_positions.append((x + dx, y + dy))
+
+        return block_positions
+
+    def check_move(self, direction):
+        """
+        See if the current shape can be moved in that direction
+        """
+        return self.board.are_empty(self.new_positions(direction))
+
+    def check_rotate(self, direction):
+        """
+        See if the current shape can be rotated in that direction
+        """
+        return self.board.are_empty(self.shape.rotated_positions(direction))
+
+    def update_display(self):
+        self.game_window.show_score(self.score, self.level)
+        self.board_canvas.draw(self.shape)
+
+    def update_score(self, rows_cleared):
+        self.score += 100 * rows_cleared * rows_cleared
+
     def handle_move(self, direction):
-        #if you can't move then you've hit something
-        if not self.shape.move(direction):
-            # if your heading down then the shape has 'landed'
-            if direction == DOWN:
-                self.score += self.board.check_for_complete_row(
-                    self.shape.blocks
-                )
-                del self.shape
-                self.shape = self.get_next_shape()
+        if self.check_move(direction):
+            self.shape.coords = self.new_positions(direction)
+        elif direction is DOWN: # if your heading down then the shape has 'landed'
+            self.board.add_blocks_at(self.shape.coords, self.shape.color)
+            self.update_score(self.board.check_for_complete_rows())
+            self.shape = self.get_next_shape()
 
-                # If the shape returned is None, then this indicates that
-                # that the check before creating it failed and the
-                # game is over!
-                if self.shape is None:
-                    self.game_window.show_game_over(self.score, self.level)
-                    self.game_over = True
-                    return False
-
-                # do we go up a level?
-                if (self.level < NO_OF_LEVELS and
-                    self.score >= self.thresholds[self.level]):
-                    self.level += 1
-                    self.delay -= 100
-
-                self.game_window.show_score(self.score, self.level)
-
-                # Signal that the shape has 'landed'
+            if not self.board.are_empty(self.shape.coords): # can't place any more shapes, player has lost!
+                self.board.add_blocks_at(self.shape.coords, self.shape.color)
+                self.update_display()
+                self.game_window.show_game_over(self.score, self.level)
+                self.game_over = True
                 return False
+
+            # do we go up a level?
+            if (self.level < NO_OF_LEVELS and
+                self.score >= self.thresholds[self.level]):
+                self.level += 1
+                self.delay -= 100
+
+            self.update_display()
+
+            # Signal that the shape has 'landed'
+            return False
+        self.update_display()
         return True
+
+    def handle_rotate(self, clockwise):
+        if self.check_rotate(clockwise):
+            self.shape.coords = self.shape.rotated_positions(clockwise)
+        self.update_display()
 
     def left_callback( self, event ):
         if self.shape:
@@ -127,11 +154,11 @@ class game_controller(object):
 
     def a_callback( self, event):
         if self.shape:
-            self.shape.rotate(clockwise=True)
+            self.handle_rotate(clockwise=True)
 
     def s_callback( self, event):
         if self.shape:
-            self.shape.rotate(clockwise=False)
+            self.handle_rotate(clockwise=False)
 
     def p_callback(self, event):
         self.game_window.parent.after_cancel(self.after_id)
@@ -145,6 +172,6 @@ class game_controller(object):
 
     def get_next_shape( self ):
         """
-        Get next tetromino from queue and put it in the board
+        Returns next tetromino from queue
         """
-        return get_next_shape_in_queue().check_and_create(self.board)
+        return get_next_shape_in_queue()

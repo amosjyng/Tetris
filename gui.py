@@ -18,6 +18,40 @@ class status_bar( Frame ):
         self.label.config(test="")
         self.label.update_idletasks()
 
+class BoardCanvas(Frame):
+    """
+    The BoardCanvas is a graphical representation of a board
+    """
+    def __init__(self, parent, board, scale = 20, offset = 3):
+        Frame.__init__(self, parent)
+        self.parent = parent
+        self.board = board
+        self.scale = scale
+        self.offset = offset
+
+        self.canvas = Canvas(parent,
+            height = (self.board.max_y * scale) + offset,
+            width = (self.board.max_x * scale) + offset)
+        self.canvas.pack()
+        self.pack(side=BOTTOM)
+
+    def draw_block_at(self, x, y, color):
+        rx = (x * self.scale) + self.offset
+        ry = (y * self.scale) + self.offset
+        self.canvas.create_rectangle(rx, ry, rx + self.scale, ry + self.scale, fill=color)
+
+    def draw(self, shape):
+        self.canvas.delete(ALL) # redraw entire screen
+
+        for x in range(self.board.max_x):
+            for y in range(self.board.max_y):
+                block = self.board.landed.get((x, y))
+                if block:
+                    self.draw_block_at(x, y, block) # "block" is actually the block's color
+
+        for (x, y) in shape.coords:
+            self.draw_block_at(x, y, shape.color)
+
 class GameWindow(object):
     """
     The GUI game window that the user interacts with

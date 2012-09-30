@@ -1,116 +1,42 @@
-from game_mechanics import direction_d
-
-class Block(object):
-    def __init__( self, id, (x, y)):
-        self.id = id
-        self.x = x
-        self.y = y
-
-    def coord( self ):
-        return (self.x, self.y)
-
 class shape(object):
     """
     Shape is the  Base class for the game pieces e.g. square, T, S, Z, L,
     reverse L and I. Shapes are constructed of blocks. 
     """
-    @classmethod
-    def check_and_create(cls, board, coords, colour ):
-        """
-        Check if the blocks that make the shape can be placed in empty coords
-        before creating and returning the shape instance. Otherwise, return
-        None.
-        """
-        for coord in coords:
-            if not board.check_block( coord ):
-                return None
 
-        return cls( board, coords, colour)
-
-    def __init__(self, board, coords, colour ):
+    def __init__(self, coords, color ):
         """
         Initialise the shape base.
         """
-        self.board = board
-        self.blocks = []
+        self.coords = coords
+        self.color = color
 
-        for coord in coords:
-            block = Block(self.board.add_block( coord, colour), coord)
-
-            self.blocks.append( block )
-
-    def move( self, direction ):
-        """
-        Move the blocks in the direction indicated by adding (dx, dy) to the
-        current block coordinates
-        """
-        d_x, d_y = direction_d[direction]
-
-        for block in self.blocks:
-
-            x = block.x + d_x
-            y = block.y + d_y
-
-            if not self.board.check_block( (x, y) ):
-                return False
-
-        for block in self.blocks:
-
-            x = block.x + d_x
-            y = block.y + d_y
-
-            self.board.move_block( block.id, (d_x, d_y) )
-
-            block.x = x
-            block.y = y
-
-        return True
-
-    def rotate(self, clockwise = True):
+    def rotated_positions(self, clockwise = True):
         """
         Rotate the blocks around the 'middle' block, 90-degrees. The
         middle block is always the index 0 block in the list of blocks
         that make up a shape.
         """
-        # TO DO: Refactor for DRY
-        middle = self.blocks[0]
+        middle = self.coords[0]
         rel = []
-        for block in self.blocks:
-            rel.append( (block.x-middle.x, block.y-middle.y ) )
+        for (x, y) in self.coords: # get position of blocks relative to center block
+            rel.append( (x - middle[0], y - middle[1] ) )
+
+        new_positions = []
 
         # to rotate 90-degrees (x,y) = (-y, x)
-        # First check that the there are no collisions or out of bounds moves.
-        for idx in xrange(len(self.blocks)):
+        for idx in xrange(len(self.coords)):
             rel_x, rel_y = rel[idx]
             if clockwise:
-                x = middle.x+rel_y
-                y = middle.y-rel_x
+                x = middle[0] + rel_y
+                y = middle[1] - rel_x
+                new_positions.append((x, y))
             else:
-                x = middle.x-rel_y
-                y = middle.y+rel_x
+                x = middle[0] - rel_y
+                y = middle[1] + rel_x
+                new_positions.append((x, y))
 
-            if not self.board.check_block( (x, y) ):
-                return False
-
-        for idx in xrange(len(self.blocks)):
-            rel_x, rel_y = rel[idx]
-            if clockwise:
-                x = middle.x+rel_y
-                y = middle.y-rel_x
-            else:
-                x = middle.x-rel_y
-                y = middle.y+rel_x
-
-
-            diff_x = x - self.blocks[idx].x
-            diff_y = y - self.blocks[idx].y
-
-            self.board.move_block( self.blocks[idx].id, (diff_x, diff_y) )
-
-            self.blocks[idx].x = x
-            self.blocks[idx].y = y
-
-        return True
+        return new_positions
 
 class shape_limited_rotate( shape ):
     """
@@ -119,9 +45,9 @@ class shape_limited_rotate( shape ):
     Instead they toggle between 90 degrees clockwise and then back 90 degrees
     anti-clockwise.
     """
-    def __init__( self, board, coords, colour ):
+    def __init__( self, coords, colour ):
         self.clockwise = True
-        super(shape_limited_rotate, self).__init__(board, coords, colour)
+        super(shape_limited_rotate, self).__init__(coords, colour)
 
     def rotate(self, clockwise=True):
         """
@@ -134,12 +60,10 @@ class shape_limited_rotate( shape ):
         else:
             self.clockwise=True
 
-
 class square_shape( shape ):
-    @classmethod
-    def check_and_create( cls, board ):
+    def __init__(self):
         coords = [(4,0),(5,0),(4,1),(5,1)]
-        return super(square_shape, cls).check_and_create(board, coords, "red")
+        return super(square_shape, self).__init__(coords, "red")
 
     def rotate(self, clockwise=True):
         """
@@ -148,38 +72,31 @@ class square_shape( shape ):
         pass
 
 class t_shape( shape ):
-    @classmethod
-    def check_and_create( cls, board ):
+    def __init__(self):
         coords = [(4,0),(3,0),(5,0),(4,1)]
-        return super(t_shape, cls).check_and_create(board, coords, "yellow" )
+        return super(t_shape, self).__init__(coords, "yellow")
 
 class l_shape( shape ):
-    @classmethod
-    def check_and_create( cls, board ):
+    def __init__(self):
         coords = [(4,0),(3,0),(5,0),(3,1)]
-        return super(l_shape, cls).check_and_create(board, coords, "orange")
+        return super(l_shape, self).__init__(coords, "orange")
 
 class reverse_l_shape( shape ):
-    @classmethod
-    def check_and_create( cls, board ):
+    def __init__(self):
         coords = [(5,0),(4,0),(6,0),(6,1)]
-        return super(reverse_l_shape, cls).check_and_create(
-            board, coords, "green")
+        return super(reverse_l_shape, self).__init__(coords, "green")
 
 class z_shape( shape_limited_rotate ):
-    @classmethod
-    def check_and_create( cls, board ):
-        coords =[(5,0),(4,0),(5,1),(6,1)]
-        return super(z_shape, cls).check_and_create(board, coords, "purple")
+    def __init__(self):
+        coords = [(5,0),(4,0),(5,1),(6,1)]
+        return super(z_shape, self).__init__(coords, "purple")
 
 class s_shape( shape_limited_rotate ):
-    @classmethod
-    def check_and_create( cls, board ):
-        coords =[(5,1),(4,1),(5,0),(6,0)]
-        return super(s_shape, cls).check_and_create(board, coords, "magenta")
+    def __init__(self):
+        coords = [(5,1),(4,1),(5,0),(6,0)]
+        return super(s_shape, self).__init__(coords, "magenta")
 
 class i_shape( shape_limited_rotate ):
-    @classmethod
-    def check_and_create( cls, board ):
-        coords =[(4,0),(3,0),(5,0),(6,0)]
-        return super(i_shape, cls).check_and_create(board, coords, "blue")
+    def __init__(self):
+        coords = [(4,0),(3,0),(5,0),(6,0)]
+        return super(i_shape, self).__init__(coords, "blue")

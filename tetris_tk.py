@@ -8,7 +8,7 @@ Controls:
     Down Arrow      Move down
     Up Arrow        Drop Tetronimoe to the bottom
     'a'             Rotate anti-clockwise (to the left)
-    'b'             Rotate clockwise (to the right)
+    's'             Rotate clockwise (to the right)
     'p'             Pause the game.
 """
 
