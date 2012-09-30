@@ -1,6 +1,5 @@
 from board  import *
 from shapes import *
-from random import randint
 from game_mechanics import *
 import tkMessageBox
 import sys
@@ -34,15 +33,6 @@ class game_controller(object):
         self.score = 0
         self.level = 0
         self.delay = 1000    #ms
-
-        #lookup table
-        self.shapes = [square_shape,
-                       t_shape,
-                       l_shape,
-                       reverse_l_shape,
-                       z_shape,
-                       s_shape,
-                       i_shape ]
 
         self.thresholds = level_thresholds( 500, NO_OF_LEVELS )
 
@@ -160,5 +150,4 @@ class game_controller(object):
         """
         Randomly select which tetrominoe will be used next.
         """
-        the_shape = self.shapes[ randint(0,len(self.shapes)-1) ]
-        return the_shape.check_and_create(self.board)
+        return get_next_shape_in_queue().check_and_create(self.board)
