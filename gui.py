@@ -148,6 +148,6 @@ class game_controller(object):
 
     def get_next_shape( self ):
         """
-        Randomly select which tetrominoe will be used next.
+        Get next tetromino from queue and put it in the board
         """
         return get_next_shape_in_queue().check_and_create(self.board)
