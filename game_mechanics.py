@@ -22,10 +22,13 @@ shapes = [square_shape, t_shape, l_shape, reverse_l_shape, z_shape, s_shape, i_s
 
 shapes_queue = []
 
-for _ in range(SHAPES_QUEUE_SIZE):
+for _ in range(SHAPES_QUEUE_SIZE): # initialize the queue
     shapes_queue.append(random.choice(shapes))
 
 def get_next_shape_in_queue():
+    """
+    Returns the next shape in the queue, and puts another shape into the queue
+    """
     shapes_queue.append(random.choice(shapes))
     print "Queued shape is {0}".format(shapes_queue[-1])
     return shapes_queue.pop(0)
