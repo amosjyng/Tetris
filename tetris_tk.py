@@ -12,7 +12,8 @@ Controls:
     'p'             Pause the game.
 """
 
-from gui import *
+from game_mechanics import game_controller
+from Tkinter import Tk
 
 if __name__ == "__main__":
     root = Tk()

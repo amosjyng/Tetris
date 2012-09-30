@@ -1,5 +1,5 @@
 from Tkinter import *
-from game_mechanics import *
+from game_mechanics import direction_d, DOWN
 
 class Board( Frame ):
     """
@@ -27,6 +27,7 @@ class Board( Frame ):
             height=(max_y * scale)+offset,
             width= (max_x * scale)+offset)
         self.canvas.pack()
+        self.pack(side=BOTTOM)
 
     def check_for_complete_row( self, blocks ):
         """
