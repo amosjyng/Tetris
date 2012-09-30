@@ -1,5 +1,3 @@
-from game_mechanics import direction_d, DOWN
-
 class Board(object):
     """
     The board represents the tetris playing area. A grid of x by y blocks.
@@ -56,11 +54,8 @@ class Board(object):
                 # move all the rows above it down
                 for ay in xrange(y - 1, empty_row, -1):
                     for x in xrange(self.max_x):
-                        if self.landed.get((x, ay)):
-                            block = self.landed.pop((x, ay))
-                            dx,dy = direction_d[DOWN]
-
-                            self.landed[(x+dx, ay+dy)] = block
+                        if self.landed.has_key((x, ay)):
+                            self.landed[(x, ay + 1)] = self.landed.pop((x, ay))
 
                 # move the empty row down index down too
                 empty_row +=1
