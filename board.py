@@ -16,12 +16,20 @@ class Board(object):
         self.max_x = max_x
         self.max_y = max_y
 
+    def falling_distance(self, cleared_position):
+        x, y = cleared_position
+        for y_pos in range(y + 1, self.max_y):
+            if self.landed.has_key((x, y_pos)):
+                return y_pos - y
+
+        return self.max_y - y
+
     def check_for_complete_rows(self):
         """
         Look for a complete row of blocks, from the bottom up until the top row
         or until an empty row is reached.
         """
-        rows_deleted = 0
+        deleted_rows = []
         empty_row = 0
 
         # find the first empty row
@@ -45,29 +53,29 @@ class Board(object):
                     break
 
             if complete_row:
-                rows_deleted += 1
+                deleted_rows.append(y)
 
                 #delete the completed row
                 for x in range(self.max_x):
                     self.landed.pop((x,y))
 
-                # move all the rows above it down
-                for ay in xrange(y - 1, empty_row, -1):
-                    for x in xrange(self.max_x):
-                        if self.landed.has_key((x, ay)):
-                            self.landed[(x, ay + 1)] = self.landed.pop((x, ay))
+            y -= 1
 
-                # move the empty row down index down too
-                empty_row +=1
-                # y stays same as row above has moved down.
+        # todo: refactor so that we're not mixing x/y and rows/columns
+        # also todo: change gravity so that blocks don't break up due to gravity
+        for deleted_row in deleted_rows: # go through every row we deleted
+            for column in range(self.max_x): # and go through each column
+                fall_distance = self.falling_distance((column, deleted_row))
+                # and then shift each block in that column down by the amount it needs to fall
+                for row in range(deleted_row - 1, 0, -1):
+                    if self.landed.has_key((column, row)):
+                        self.landed[(column, row + fall_distance)] = self.landed.pop((column, row))
 
-            else:
-                y -= 1
+        deleted_count = len(deleted_rows)
+        if deleted_count > 0: # in case falling blocks create another completed row
+            deleted_count += self.check_for_complete_rows()
 
-        #self.output() # non-gui diagnostic
-
-        # return the number of rows deleted
-        return rows_deleted
+        return deleted_count
 
     def output( self ):
         for y in xrange(self.max_y):
