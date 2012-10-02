@@ -1,5 +1,7 @@
+import time
+import sys
 from Tkinter import *
-import tkMessageBox
+from threading import Thread
 
 class status_bar( Frame ):
     """
@@ -22,16 +24,18 @@ class BoardCanvas(Frame):
     """
     The BoardCanvas is a graphical representation of a board
     """
-    def __init__(self, parent, board, scale = 20, offset = 3):
+    def __init__(self, parent, scale = 20, offset = 3):
         Frame.__init__(self, parent)
         self.parent = parent
-        self.board = board
         self.scale = scale
         self.offset = offset
 
-        self.canvas = Canvas(parent,
-            height = (self.board.max_y * scale) + offset,
-            width = (self.board.max_x * scale) + offset)
+    def attach(self, board):
+        self.board = board
+
+        self.canvas = Canvas(self.parent,
+            height = (self.board.max_y * self.scale) + self.offset,
+            width  = (self.board.max_x * self.scale) + self.offset)
         self.canvas.pack()
         self.pack(side=BOTTOM)
 
@@ -52,17 +56,29 @@ class BoardCanvas(Frame):
         for (x, y) in shape.coords:
             self.draw_block_at(x, y, shape.color)
 
-class GameWindow(object):
+    def display_text(self, display_text):
+        x = self.board.max_x / 2
+        y = self.board.max_y / 2
+        rx = (x * self.scale) + self.offset
+        ry = (y * self.scale) + self.offset
+        self.canvas.create_rectangle(0, ry - self.scale, self.board.max_x * self.scale + self.offset, ry + self.scale, fill = "black")
+        self.canvas.create_text(rx, ry, text = display_text, fill = "red", font = ("Helvetica", 16))
+
+class GameWindow(Thread):
     """
     The GUI game window that the user interacts with
     """
 
-    def __init__(self, parent, game_controller):
+    def __init__(self, parent):
         self.parent = parent
+        self.parent.protocol("WM_DELETE_WINDOW", self.window_closed_callback)
         self.status_bar = status_bar(parent)
         self.status_bar.pack(side = TOP, fill = X)
         self.show_score(0, 0)
 
+        self.canvas = BoardCanvas(self.parent)
+
+    def attach(self, game_controller):
         self.parent.bind("<Left>", game_controller.left_callback)
         self.parent.bind("<Right>", game_controller.right_callback)
         self.parent.bind("<Up>", game_controller.up_callback)
@@ -71,16 +87,34 @@ class GameWindow(object):
         self.parent.bind("s", game_controller.s_callback)
         self.parent.bind("p", game_controller.p_callback)
 
+        self.game = game_controller
+        self.canvas.attach(self.game.board)
+        self.game.display_callback = self.canvas.draw
+
+        self.update_display()
+        Thread.__init__(self)
+        self.start()
+
     def show_score(self, score, level):
         self.status_bar.set("Score: {0}\t Level: {1} ".format(score, level + 1))
 
-    def show_pause(self):
-        tkMessageBox.askquestion(title="Paused!", message="Continue?", type=tkMessageBox.OK)
+    def update_display(self):
+        self.show_score(self.game.score, self.game.level)
+        self.canvas.draw(self.game.shape)
+        if self.game.paused:
+            self.canvas.display_text("PAUSED")
+        elif self.game.game_over:
+            print "over!!"
+            self.canvas.display_text("GAME OVER")
 
-    def show_game_over(self, score, level):
-        self.status_bar.set("Score: {0}\t Level: {1} ".format(score, level + 1))
-        tkMessageBox.showwarning(title = "GAME OVER", message = "Score: {0}\t Level: {1} ".format(score, level + 1),
-            parent = self.parent )
+    def window_closed_callback(self):
+        self.game.game_over = True
+        sys.exit("Close window button clicked")
 
-        Toplevel().destroy()
-        self.parent.destroy()
+    def run(self):
+        while self.game:
+            self.update_display()
+            time.sleep(0.1)
+            if self.game.game_over:
+                self.update_display()
+                break

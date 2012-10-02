@@ -14,10 +14,14 @@ Controls:
 
 from game_mechanics import game_controller
 from Tkinter import Tk
+from gui import GameWindow
 
 if __name__ == "__main__":
     root = Tk()
     root.title("Tetris Tk")
-    theGame = game_controller( root )
+    theGame = game_controller()
+    theGame.start()
+    game_window = GameWindow(root)
+    game_window.attach(theGame)
     
     root.mainloop()
