@@ -96,7 +96,6 @@ class game_controller(Thread):
         self.score += 100 * rows_cleared * rows_cleared
 
     def handle_move(self, direction):
-        print direction
         if self.paused or self.game_over:
             pass
         elif self.check_move(direction):

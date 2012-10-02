@@ -104,7 +104,6 @@ class GameWindow(Thread):
         if self.game.paused:
             self.canvas.display_text("PAUSED")
         elif self.game.game_over:
-            print "over!!"
             self.canvas.display_text("GAME OVER")
 
     def window_closed_callback(self):
