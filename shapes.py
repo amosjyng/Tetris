@@ -38,6 +38,28 @@ class shape(object):
 
         return new_positions
 
+    def rotate(self, clockwise = True): # clockwise
+        self.coords = self.rotated_positions(clockwise)
+
+    def leftmost_position(self): # x-position of left-most piece
+        x_pos = 999999 # todo: make this max-int
+        for coord in self.coords:
+            if coord[0] < x_pos:
+                x_pos = coord[0]
+
+        return x_pos
+
+    def rightmost_position(self):
+        x_pos = 0
+        for coord in self.coords:
+            if coord[0] > x_pos:
+                x_pos = coord[0]
+
+        return x_pos
+
+    def width(self):
+        return self.rightmost_position() - self.leftmost_position()
+
 class shape_limited_rotate( shape ):
     """
     This is a base class for the shapes like the S, Z and I that don't fully
@@ -63,6 +85,7 @@ class shape_limited_rotate( shape ):
 class square_shape( shape ):
     def __init__(self):
         coords = [(4,0),(5,0),(4,1),(5,1)]
+        self.orientations = 1
         return super(square_shape, self).__init__(coords, "red")
 
     def rotate(self, clockwise=True):
@@ -74,29 +97,35 @@ class square_shape( shape ):
 class t_shape( shape ):
     def __init__(self):
         coords = [(4,0),(3,0),(5,0),(4,1)]
+        self.orientations = 4
         return super(t_shape, self).__init__(coords, "yellow")
 
 class l_shape( shape ):
     def __init__(self):
         coords = [(4,0),(3,0),(5,0),(3,1)]
+        self.orientations = 4
         return super(l_shape, self).__init__(coords, "orange")
 
 class reverse_l_shape( shape ):
     def __init__(self):
         coords = [(5,0),(4,0),(6,0),(6,1)]
+        self.orientations = 4
         return super(reverse_l_shape, self).__init__(coords, "green")
 
 class z_shape( shape_limited_rotate ):
     def __init__(self):
         coords = [(5,0),(4,0),(5,1),(6,1)]
+        self.orientations = 2
         return super(z_shape, self).__init__(coords, "purple")
 
 class s_shape( shape_limited_rotate ):
     def __init__(self):
         coords = [(5,1),(4,1),(5,0),(6,0)]
+        self.orientations = 2
         return super(s_shape, self).__init__(coords, "magenta")
 
 class i_shape( shape_limited_rotate ):
     def __init__(self):
         coords = [(4,0),(3,0),(5,0),(6,0)]
+        self.orientations = 2
         return super(i_shape, self).__init__(coords, "blue")

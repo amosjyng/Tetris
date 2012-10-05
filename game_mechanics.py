@@ -1,26 +1,13 @@
 import random
 import time
+from copy import deepcopy
 from threading import Thread
 
 from shapes import *
 from board import Board
 from constants import *
 
-#lookup table
 shapes = [square_shape, t_shape, l_shape, reverse_l_shape, z_shape, s_shape, i_shape ]
-
-shapes_queue = []
-
-for _ in range(SHAPES_QUEUE_SIZE): # initialize the queue
-    shapes_queue.append(random.choice(shapes)())
-
-def get_next_shape_in_queue():
-    """
-    Returns the next shape in the queue, and puts another shape into the queue
-    """
-    shapes_queue.append(random.choice(shapes)())
-    print "Queued shape is {0}".format(shapes_queue[-1])
-    return shapes_queue.pop(0)
 
 def level_thresholds( first_level, no_of_levels ):
     """
@@ -46,7 +33,7 @@ class DownKeyThread(Thread):
             time.sleep(DOWNWARDS_INTERVAL)
             self.game.handle_move(DOWN)
 
-class game_controller(Thread):
+class game_controller():
     """
     Main game loop and receives GUI callback events for keypresses etc...
     """
@@ -55,7 +42,11 @@ class game_controller(Thread):
         """
         Initialize the game...
         """
-        Thread.__init__(self)
+
+        self.shapes_queue = []
+        for _ in range(SHAPES_QUEUE_SIZE): # initialize the queue
+            self.shapes_queue.append(random.choice(shapes)())
+
         self.score = 0
         self.level = 0
         self.delay = 1000    #ms
@@ -65,8 +56,24 @@ class game_controller(Thread):
         self.paused = False
         self.game_over = False
 
-    def run(self):
-        DownKeyThread(self).run()
+    def create_copy(self):
+        """
+        Creates a clone of this game (for AI purposes)
+        """
+        clone = game_controller()
+        clone.shapes_queue = deepcopy(self.shapes_queue)
+        clone.score = deepcopy(self.score)
+        clone.board = deepcopy(self.board)
+        clone.shape = deepcopy(self.shape)
+
+        return clone
+
+    def get_next_shape_in_queue(self):
+        """
+        Returns the next shape in the queue, and puts another shape into the queue
+        """
+        self.shapes_queue.append(random.choice(shapes)())
+        return self.shapes_queue.pop(0)
 
     def new_positions(self, direction):
         """
@@ -118,6 +125,12 @@ class game_controller(Thread):
         if not self.paused and self.check_rotate(clockwise):
             self.shape.coords = self.shape.rotated_positions(clockwise)
 
+    def move_all_the_way(self, direction):
+        while self.check_move(direction):
+            self.handle_move(direction)
+
+        self.handle_move(direction)
+
     def left_callback( self, event ):
         if self.shape:
             self.handle_move(LEFT)
@@ -129,10 +142,7 @@ class game_controller(Thread):
     def up_callback( self, event ):
         if self.shape:
             # drop the tetrominoe to the bottom
-            while self.check_move(DOWN):
-                self.handle_move(DOWN)
-
-            self.handle_move(DOWN)
+            self.move_all_the_way(DOWN)
 
     def down_callback( self, event ):
         if self.shape:
@@ -153,4 +163,4 @@ class game_controller(Thread):
         """
         Returns next tetromino from queue
         """
-        return get_next_shape_in_queue()
+        return self.get_next_shape_in_queue()

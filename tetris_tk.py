@@ -12,16 +12,22 @@ Controls:
     'p'             Pause the game.
 """
 
-from game_mechanics import game_controller
+from game_mechanics import game_controller, DownKeyThread
 from Tkinter import Tk
 from gui import GameWindow
+from ai import AI
 
 if __name__ == "__main__":
     root = Tk()
     root.title("Tetris Tk")
     theGame = game_controller()
-    theGame.start()
     game_window = GameWindow(root)
     game_window.attach(theGame)
+    ai = AI()
+    ai.attach(theGame)
+    ai.start()
+    DownKeyThread(theGame).start()
+
+    print "Queued shapes are {0}".format(theGame.shapes_queue)
     
     root.mainloop()

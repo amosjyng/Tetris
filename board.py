@@ -110,13 +110,6 @@ class Board(object):
 
         return True
 
-    def remove_blocks_at(self, coords):
-        """
-        Removes all the blocks at the specified coordinates
-        """
-        for coord in coords:
-            self.landed.pop(coord)
-
     def add_blocks_at(self, coords, color):
         """
         Adds blocks at all the specified coordinates
