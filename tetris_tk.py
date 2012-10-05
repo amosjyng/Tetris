@@ -26,7 +26,7 @@ if __name__ == "__main__":
     ai = AI()
     ai.attach(theGame)
     ai.start()
-    DownKeyThread(theGame).start()
+    #DownKeyThread(theGame).start()
 
     print "Queued shapes are {0}".format(theGame.shapes_queue)
     
