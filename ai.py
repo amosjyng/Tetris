@@ -16,6 +16,7 @@ class AI(Thread):
         Simulates playing a game for up to "level" times, where "level" should be the number of items in
         the queue that this game allows for
         """
+        
         game = game.create_copy()
         shape = game.shape # not the original game piece anymore, so no worries altering this
         best_score = 0
@@ -31,6 +32,8 @@ class AI(Thread):
                 new_level = level - 1
                 this_best_score = 0
                 this_best_move = [(orientation, position)]
+                if level is SHAPES_QUEUE_SIZE:
+                    print "Trying out {0}".format(this_best_move)
                 if new_level >= 0: # still something left in queue or board
                     results = self.find_best_move(translated_game, new_level)
                     this_best_score = results[0]
