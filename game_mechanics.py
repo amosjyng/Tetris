@@ -30,7 +30,7 @@ class DownKeyThread(Thread):
 
     def run(self):
         while not self.game.game_over:
-            time.sleep(DOWNWARDS_INTERVAL)
+            time.sleep(DOWNWARDS_INTERVAL - self.game.level * 0.1)
             self.game.handle_move(DOWN)
 
 class game_controller():
