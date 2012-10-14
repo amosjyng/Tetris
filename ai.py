@@ -1,5 +1,6 @@
 from threading import Thread
 from constants import SHAPES_QUEUE_SIZE
+import yappi
 
 class AI(Thread):
     """
@@ -23,7 +24,7 @@ class AI(Thread):
         best_moves = [(0,0)]
         for orientation in range(game.shape.orientations):
             shape.rotate() # a rotated piece, not the old one anymore
-            rotated_game = game.create_copy()
+            rotated_game = game
             rotated_game.move_all_the_way("left")
             for position in range(rotated_game.board.max_x - shape.width() + 1):
                 rotated_game.handle_move("right")
@@ -43,9 +44,12 @@ class AI(Thread):
                     best_score = this_best_score
                     best_moves = this_best_move
 
+            rotated_game.handle_move("right")
+
         return (best_score, best_moves)
 
     def run(self):
+        yappi.start()
         while not self.game.game_over:
             best_move = self.find_best_move(self.game, SHAPES_QUEUE_SIZE)
             for _ in range(best_move[1][0][0]): # the orientation
@@ -55,3 +59,4 @@ class AI(Thread):
                 self.game.handle_move("right")
 
             self.game.move_all_the_way("down")
+        yappi.print_stats()
