@@ -1,17 +1,11 @@
+from constants import MAXX, MAXY
+
 class Board(object):
     """
     The board represents the tetris playing area. A grid of x by y blocks.
     """
-    def __init__(self, max_x = 10, max_y = 20):
-        """
-        Init and config the tetris board, default configuration:
-        Scale (block size in pixels) = 20
-        max X (in blocks) = 10
-        max Y (in blocks) = 20
-        offset (in pixels) = 3
-        """
-
-        # blocks are indexed by there corrdinates e.g. (4,5), these are
+    def __init__(self, max_x = MAXX, max_y = MAXY):
+        # blocks are indexed by their corrdinates e.g. (4,5), these are
         self.landed = {}
         self.max_x = max_x
         self.max_y = max_y
@@ -23,6 +17,17 @@ class Board(object):
                 return y_pos - y
 
         return self.max_y - y
+
+    def highest_piece(self):
+        """
+        Returns how far off the bottom of the board the top piece in the board is
+        """
+        highest_y = self.max_y
+        for key in self.landed.iterkeys():
+            if key[1] < highest_y:
+                highest_y = key[1]
+
+        return self.max_y - highest_y
 
     def check_for_complete_rows(self):
         """

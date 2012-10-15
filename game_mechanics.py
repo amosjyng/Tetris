@@ -51,7 +51,7 @@ class game_controller():
         self.level = 0
         self.delay = 1000    #ms
         self.thresholds = level_thresholds(500, NO_OF_LEVELS)
-        self.board = Board(max_x=MAXX, max_y=MAXY)
+        self.board = Board()
         self.shape = self.get_next_shape()
         self.paused = False
         self.game_over = False
@@ -164,3 +164,4 @@ class game_controller():
         Returns next tetromino from queue
         """
         return self.get_next_shape_in_queue()
+        #return square_shape()
