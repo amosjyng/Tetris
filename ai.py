@@ -44,8 +44,6 @@ class AI(Thread):
                     best_score = this_best_score
                     best_moves = this_best_move
 
-            rotated_game.handle_move("right")
-
         return (best_score, best_moves)
 
     def run(self):

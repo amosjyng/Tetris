@@ -1,3 +1,5 @@
+from constants import MAXX
+
 class shape(object):
     """
     Shape is the  Base class for the game pieces e.g. square, T, S, Z, L,
@@ -10,6 +12,15 @@ class shape(object):
         """
         self.coords = coords
         self.color = color
+
+    def translate(self, direction, coords = None):
+        if coords is None:
+            coords = self.coords
+        new_positions = []
+        for coord in coords:
+            new_positions.append((coord[0] + direction[0], coord[1] + direction[1]))
+
+        return new_positions
 
     def rotated_positions(self, clockwise = True):
         """
@@ -36,26 +47,50 @@ class shape(object):
                 y = middle[1] + rel_x
                 new_positions.append((x, y))
 
+        top = self.topmost_position(new_positions)
+        if top < 0:
+            new_positions = self.translate((0, -top), new_positions)
+        left = self.leftmost_position(new_positions)
+        if left < 0:
+            new_positions = self.translate((-left, 0), new_positions)
+        right = self.rightmost_position(new_positions)
+        if right >= MAXX:
+            new_positions = self.translate((MAXX - right - 1, 0), new_positions)
+
         return new_positions
 
     def rotate(self, clockwise = True): # clockwise
         self.coords = self.rotated_positions(clockwise)
 
-    def leftmost_position(self): # x-position of left-most piece
+    def leftmost_position(self, coords = None): # x-position of left-most piece
+        if coords is None:
+            coords = self.coords
         x_pos = 999999 # todo: make this max-int
-        for coord in self.coords:
+        for coord in coords:
             if coord[0] < x_pos:
                 x_pos = coord[0]
 
         return x_pos
 
-    def rightmost_position(self):
+    def rightmost_position(self, coords = None):
+        if coords is None:
+            coords = self.coords
         x_pos = 0
-        for coord in self.coords:
+        for coord in coords:
             if coord[0] > x_pos:
                 x_pos = coord[0]
 
         return x_pos
+
+    def topmost_position(self, coords = None):
+        if coords is None:
+            coords = self.coords
+        y_pos = 999999
+        for coord in coords:
+            if coord[1] < y_pos:
+                y_pos = coord[1]
+
+        return y_pos
 
     def width(self):
         return self.rightmost_position() - self.leftmost_position()
