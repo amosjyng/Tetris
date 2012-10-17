@@ -43,14 +43,8 @@ class AI(Thread):
                     this_best_score += translated_game.score * 1.1
                 else:
                     this_best_score = self.heuristic(translated_game)
-                    if this_best_score > 100000:
-                        print 'wtf, score is {0}, height is {1}' \
-                                    .format(translated_game.score, translated_game.board.highest_piece())
 
                 if this_best_score > best_score:
-                    if level > 0:
-                        print 'best so far: {0}, giving a score of {1}' \
-                                .format(this_best_move, this_best_score)
                     best_score = this_best_score
                     best_moves = this_best_move
 
@@ -60,7 +54,6 @@ class AI(Thread):
         yappi.start()
         while not self.game.game_over:
             best_score, best_move = self.find_best_move(self.game, SHAPES_QUEUE_SIZE)
-            print '{0}, giving a score of {1}'.format(best_move, best_score)
             self.game.move_all_the_way("left")
             for _ in range(best_move[0]): # the orientation
                 self.game.move_all_the_way("left")
@@ -69,5 +62,4 @@ class AI(Thread):
                 self.game.handle_move("right")
 
             self.game.move_all_the_way("down")
-            print 'now: {0}'.format(self.game.board.highest_piece())
         yappi.print_stats()
