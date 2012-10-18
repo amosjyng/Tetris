@@ -34,7 +34,7 @@ class AI(Thread):
                 if position is not 0: # don't "translate" for first translation
                     rotated_game.handle_move("right")
                 translated_game = game.create_copy()
-                translated_game.move_all_the_way("down")
+                deleted_rows = translated_game.move_all_the_way("down")
                 new_level = level - 1
                 this_best_score = 0
                 this_best_move = (orientation, position)
@@ -47,6 +47,8 @@ class AI(Thread):
                 if this_best_score > best_score:
                     best_score = this_best_score
                     best_moves = this_best_move
+
+                #translated_game.restore(deleted_rows)
 
         return best_score, best_moves
 

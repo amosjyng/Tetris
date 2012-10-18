@@ -109,7 +109,8 @@ class game_controller():
             self.shape.coords = self.new_positions(direction)
         elif direction is DOWN: # if your heading down then the shape has 'landed'
             self.board.add_blocks_at(self.shape.coords, self.shape.color)
-            self.update_score(self.board.check_for_complete_rows())
+            deleted_rows = self.board.check_for_complete_rows()
+            self.update_score(len(deleted_rows))
             self.shape = self.get_next_shape()
 
             if not self.board.are_empty(self.shape.coords): # can't place any more shapes, player has lost!
@@ -120,6 +121,8 @@ class game_controller():
             if self.level < NO_OF_LEVELS and self.score >= self.thresholds[self.level]:
                 self.level += 1
                 self.delay -= 100
+
+            return deleted_rows
 
     def handle_rotate(self, clockwise):
         if not self.paused and self.check_rotate(clockwise):
