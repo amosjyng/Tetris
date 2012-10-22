@@ -109,6 +109,7 @@ class game_controller():
         self.shape = last_move['shape']
         self.board.restore(last_move['deleted_rows'], self.shape.coords)
         self.shape.coords = self.shape.translated_positions((0, -last_move['drop_distance']))
+        self.game_over = False
 
     def land_shape(self):
         self.backup()
