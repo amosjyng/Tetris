@@ -35,6 +35,10 @@ class AI(Thread):
                     rotated_game.handle_move("right")
                 translated_game = rotated_game
                 translated_game.move_all_the_way("down")
+                if translated_game.game_over:
+                    translated_game.undo()
+                    print 'skipping game over move'
+                    continue # not worth exploring this branch anymore
                 new_level = level - 1
                 this_best_score = 0
                 this_best_move = (orientation, position)

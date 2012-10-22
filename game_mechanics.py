@@ -1,5 +1,5 @@
 import random
-import time
+from time import sleep
 from copy import deepcopy
 from threading import Thread
 
@@ -30,7 +30,7 @@ class DownKeyThread(Thread):
 
     def run(self):
         while not self.game.game_over:
-            time.sleep(DOWNWARDS_INTERVAL - self.game.level * 0.1)
+            sleep(DOWNWARDS_INTERVAL - self.game.level * 0.1)
             self.game.handle_move('down')
 
 class game_controller():
@@ -119,7 +119,8 @@ class game_controller():
 
         if not self.board.are_empty(self.shape.coords): # can't place any more shapes,
             # player has lost!
-            self.board.add_blocks_at(self.shape.coords, self.shape.color)
+            if not self.under_simulation:
+                self.board.add_blocks_at(self.shape.coords, self.shape.color)
             self.game_over = True
 
         # do we go up a level?
@@ -154,8 +155,13 @@ class game_controller():
         result = self.handle_move(direction)
 
         if direction is 'down':
-            self.backup_info[-1]['drop_distance'] = drop_distance
-            self.backup_info[-1]['deleted_rows']  = result
+            if result is None:
+                print 'uh oh, game over, something bad has happened. losing piece was at {0}' \
+                        .format(self.shape.coords)
+                self.backup_info.pop() # we don't need the latest move, since it never happened
+            else:
+                self.backup_info[-1]['drop_distance'] = drop_distance
+                self.backup_info[-1]['deleted_rows']  = result
 
     def left_callback( self, event ):
         if self.shape:

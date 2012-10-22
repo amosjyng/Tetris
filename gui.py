@@ -86,6 +86,7 @@ class GameWindow(Thread):
         self.parent.bind("a", game_controller.a_callback)
         self.parent.bind("s", game_controller.s_callback)
         self.parent.bind("p", game_controller.p_callback)
+        self.parent.bind('u', self.u_callback)
 
         self.game = game_controller
         self.canvas.attach(self.game.board)
@@ -94,6 +95,9 @@ class GameWindow(Thread):
         self.update_display()
         Thread.__init__(self)
         self.start()
+
+    def u_callback(self, event):
+        self.game.undo()
 
     def show_score(self, score, level):
         self.status_bar.set("Score: {0}\t Level: {1} ".format(score, level + 1))
