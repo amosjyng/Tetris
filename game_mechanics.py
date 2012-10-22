@@ -104,8 +104,6 @@ class game_controller():
 
     def undo(self):
         last_move = self.backup_info.pop()
-        #self.move_all_the_way('up') # if we don't do this, then sometimes blocks stay at the
-        # bottom and cause a "game over." Why do blocks even stay at the bottom?
         self.shapes_queue.insert(0, self.shape)
         self.score = last_move['score']
         self.shape = last_move['shape']
