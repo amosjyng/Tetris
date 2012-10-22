@@ -70,17 +70,12 @@ class Board(object):
         # also todo: change gravity so that blocks don't break up due to gravity
         for deleted_row in deleted_rows: # go through every row we deleted
             for column in range(self.max_x): # and go through each column
-                fall_distance = self.falling_distance((column, deleted_row))
-                # and then shift each block in that column down by the amount it needs to fall
+                # and then shift each block in that column down by 1
                 for row in range(deleted_row - 1, 0, -1):
                     if self.landed.has_key((column, row)):
-                        self.landed[(column, row + fall_distance)] = self.landed.pop((column, row))
+                        self.landed[(column, row + 1)] = self.landed.pop((column, row))
 
-        deleted_count = len(deleted_rows)
-        if deleted_count > 0: # in case falling blocks create another completed row
-            deleted_count += self.check_for_complete_rows()
-
-        return deleted_count
+        return deleted_rows
 
     def output( self ):
         for y in xrange(self.max_y):
@@ -115,9 +110,27 @@ class Board(object):
 
         return True
 
+    def remove_blocks_at(self, coords):
+        """
+        Removes blocks at all the specified coordinates
+        """
+        for coord in coords:
+            self.landed.pop(coord)
+
     def add_blocks_at(self, coords, color):
         """
         Adds blocks at all the specified coordinates
         """
         for coord in coords:
             self.landed[coord] = color
+
+    def restore(self, deleted_rows, previous_shape_positions):
+        for deleted_row in deleted_rows: # go through each already-deleted row
+            for column in range(self.max_x): # and go through each column
+                # and then shift each block in that column up by 1
+                for row in range(0, deleted_row, +1):
+                    if self.landed.has_key((column, row + 1)):
+                        self.landed[(column, row)] = self.landed.pop((column, row + 1))
+
+                self.landed[(column, deleted_row)] = 'black'
+        self.remove_blocks_at(previous_shape_positions)

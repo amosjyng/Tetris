@@ -13,7 +13,7 @@ class shape(object):
         self.coords = coords
         self.color = color
 
-    def translate(self, direction, coords = None):
+    def translated_positions(self, direction, coords = None):
         if coords is None:
             coords = self.coords
         new_positions = []
@@ -47,15 +47,16 @@ class shape(object):
                 y = middle[1] + rel_x
                 new_positions.append((x, y))
 
+        # allow shape to be rotated even when next to the edges of the board
         top = self.topmost_position(new_positions)
         if top < 0:
-            new_positions = self.translate((0, -top), new_positions)
+            new_positions = self.translated_positions((0, -top), new_positions)
         left = self.leftmost_position(new_positions)
         if left < 0:
-            new_positions = self.translate((-left, 0), new_positions)
+            new_positions = self.translated_positions((-left, 0), new_positions)
         right = self.rightmost_position(new_positions)
         if right >= MAXX:
-            new_positions = self.translate((MAXX - right - 1, 0), new_positions)
+            new_positions = self.translated_positions((MAXX - right - 1, 0), new_positions)
 
         return new_positions
 

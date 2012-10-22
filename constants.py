@@ -5,10 +5,7 @@ MAXY = 22
 
 NO_OF_LEVELS = 10
 
-LEFT = "left"
-RIGHT = "right"
-DOWN = "down"
-direction_d = { "left": (-1, 0), "right": (1, 0), "down": (0, 1) }
+direction_d = { "left": (-1, 0), "right": (1, 0), "down": (0, 1), 'up': (0, -1) }
 
 SHAPES_QUEUE_SIZE = 1
 

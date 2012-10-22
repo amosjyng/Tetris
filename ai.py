@@ -1,5 +1,6 @@
 from threading import Thread
 from constants import SHAPES_QUEUE_SIZE
+from copy import deepcopy
 import yappi
 
 class AI(Thread):
@@ -21,7 +22,7 @@ class AI(Thread):
         the queue that this game allows for
         """
 
-        game = game.create_copy()
+        print 'level is {0}'.format(level)
         shape = game.shape # not the original game piece anymore, so no worries altering this
         best_score = -999999
         best_moves = (0,0)
@@ -33,7 +34,10 @@ class AI(Thread):
             for position in range(rotated_game.board.max_x - shape.width() + 2):
                 if position is not 0: # don't "translate" for first translation
                     rotated_game.handle_move("right")
-                translated_game = game.create_copy()
+                translated_game = rotated_game
+                print 'position is {0}, landing shape'.format(position)
+                before = deepcopy(translated_game.board.landed)
+                print 'BEFORE: {0}'.format(translated_game.board.landed)
                 translated_game.move_all_the_way("down")
                 new_level = level - 1
                 this_best_score = 0
@@ -43,24 +47,24 @@ class AI(Thread):
                     this_best_score += translated_game.score * 1.1
                 else:
                     this_best_score = self.heuristic(translated_game)
-                    if this_best_score > 100000:
-                        print 'wtf, score is {0}, height is {1}' \
-                                    .format(translated_game.score, translated_game.board.highest_piece())
 
                 if this_best_score > best_score:
-                    if level > 0:
-                        print 'best so far: {0}, giving a score of {1}' \
-                                .format(this_best_move, this_best_score)
                     best_score = this_best_score
                     best_moves = this_best_move
+
+                print 'undoing level {0}'.format(level)
+                translated_game.undo() # now it's back at the top
+                after = deepcopy(translated_game.board.landed)
+                if after != before:
+                    print 'ALERT!!! UNDO WAS UNCLEAN'
+                print 'AFTER: {0}'.format(translated_game.board.landed)
 
         return best_score, best_moves
 
     def run(self):
         yappi.start()
         while not self.game.game_over:
-            best_score, best_move = self.find_best_move(self.game, SHAPES_QUEUE_SIZE)
-            print '{0}, giving a score of {1}'.format(best_move, best_score)
+            best_score, best_move = self.find_best_move(self.game.create_copy(), SHAPES_QUEUE_SIZE)
             self.game.move_all_the_way("left")
             for _ in range(best_move[0]): # the orientation
                 self.game.move_all_the_way("left")
@@ -69,5 +73,4 @@ class AI(Thread):
                 self.game.handle_move("right")
 
             self.game.move_all_the_way("down")
-            print 'now: {0}'.format(self.game.board.highest_piece())
         yappi.print_stats()
