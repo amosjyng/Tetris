@@ -29,6 +29,13 @@ class Board(object):
 
         return self.max_y - highest_y
 
+    def average_height(self):
+        """
+        Returns average height of all pieces on the board
+        """
+        ys = [coord[1] for coord in self.landed.keys()]
+        return self.max_y - (sum(ys) * 1.0 / len(ys))
+
     def check_for_complete_rows(self):
         """
         Look for a complete row of blocks, from the bottom up until the top row
