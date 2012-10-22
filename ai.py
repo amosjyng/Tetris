@@ -22,7 +22,6 @@ class AI(Thread):
         the queue that this game allows for
         """
 
-        print 'level is {0}'.format(level)
         shape = game.shape # not the original game piece anymore, so no worries altering this
         best_score = -999999
         best_moves = (0,0)
@@ -35,9 +34,6 @@ class AI(Thread):
                 if position is not 0: # don't "translate" for first translation
                     rotated_game.handle_move("right")
                 translated_game = rotated_game
-                print 'position is {0}, landing shape'.format(position)
-                before = deepcopy(translated_game.board.landed)
-                print 'BEFORE: {0}'.format(translated_game.board.landed)
                 translated_game.move_all_the_way("down")
                 new_level = level - 1
                 this_best_score = 0
@@ -52,12 +48,7 @@ class AI(Thread):
                     best_score = this_best_score
                     best_moves = this_best_move
 
-                print 'undoing level {0}'.format(level)
                 translated_game.undo() # now it's back at the top
-                after = deepcopy(translated_game.board.landed)
-                if after != before:
-                    print 'ALERT!!! UNDO WAS UNCLEAN'
-                print 'AFTER: {0}'.format(translated_game.board.landed)
 
         return best_score, best_moves
 
