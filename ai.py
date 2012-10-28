@@ -14,7 +14,7 @@ class AI(Thread):
         self.game = game_controller
 
     def heuristic(self, game):
-        return game.score * 10 - game.board.average_height()
+        return game.score * 10 - game.board.average_height() - game.board.holes() * 5
 
     def find_best_move(self, game, level):
         """
@@ -68,5 +68,4 @@ class AI(Thread):
                 self.game.handle_move("right")
 
             self.game.move_all_the_way("down")
-            print 'average height now {0}'.format(self.game.board.average_height())
         yappi.print_stats()

@@ -36,6 +36,22 @@ class Board(object):
         ys = [coord[1] for coord in self.landed.keys()]
         return self.max_y - (sum(ys) * 1.0 / len(ys))
 
+    def holes(self):
+        """
+        Returns the number of holes in the game board
+        """
+        holes = 0
+
+        for column in range(self.max_x):
+            encountered_block = False
+            for row in range(self.max_y):
+                if self.landed.has_key((column, row)):
+                    encountered_block = True
+                elif encountered_block:
+                    holes += 1
+
+        return holes
+
     def check_for_complete_rows(self):
         """
         Look for a complete row of blocks, from the bottom up until the top row
