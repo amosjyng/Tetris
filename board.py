@@ -40,7 +40,7 @@ class Board(object):
         """
         Returns the number of overhangs in the game board
         """
-        holes = 0
+        overhang = 0
 
         for column in range(self.max_x):
             encountered_block = False
@@ -48,9 +48,9 @@ class Board(object):
                 if self.landed.has_key((column, row)):
                     encountered_block = True
                 elif encountered_block:
-                    holes += 1
+                    overhang += 1
 
-        return holes
+        return overhang
 
     def check_for_complete_rows(self):
         """
@@ -66,7 +66,7 @@ class Board(object):
             for x in range(self.max_x):
                 if self.landed.get((x,y), None):
                     row_is_empty = False
-                    break;
+                    break
             if row_is_empty:
                 empty_row = y
                 break
