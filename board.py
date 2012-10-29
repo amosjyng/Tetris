@@ -36,9 +36,9 @@ class Board(object):
         ys = [coord[1] for coord in self.landed.keys()]
         return self.max_y - (sum(ys) * 1.0 / len(ys))
 
-    def holes(self):
+    def overhangs(self):
         """
-        Returns the number of holes in the game board
+        Returns the number of overhangs in the game board
         """
         holes = 0
 

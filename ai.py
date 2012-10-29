@@ -14,7 +14,7 @@ class AI(Thread):
         self.game = game_controller
 
     def heuristic(self, game):
-        return game.score * 10 - game.board.average_height() - game.board.holes() * 5
+        return game.score * 10 - game.board.average_height() - game.board.overhangs() * 5
 
     def find_best_move(self, game, level):
         """
