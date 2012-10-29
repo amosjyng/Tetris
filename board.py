@@ -90,13 +90,13 @@ class Board(object):
             y -= 1
 
         # todo: refactor so that we're not mixing x/y and rows/columns
-        # also todo: change gravity so that blocks don't break up due to gravity
-        for deleted_row in deleted_rows: # go through every row we deleted
-            for column in range(self.max_x): # and go through each column
+        drop_distance = len(deleted_rows)
+        if drop_distance > 0:
+            for column in range(self.max_x): # go through each column
                 # and then shift each block in that column down by 1
-                for row in range(deleted_row - 1, 0, -1):
+                for row in range(max(deleted_rows), 0, -1):
                     if self.landed.has_key((column, row)):
-                        self.landed[(column, row + 1)] = self.landed.pop((column, row))
+                        self.landed[(column, row + drop_distance)] = self.landed.pop((column, row))
 
         return deleted_rows
 
