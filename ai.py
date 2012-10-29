@@ -54,6 +54,8 @@ class AI(Thread):
 
                 translated_game.undo() # now it's back at the top
 
+            rotated_game.shape.coords = deepcopy(rotated_game.shape.init_coords)
+
         return best_score, best_moves
 
     def run(self):

@@ -1,4 +1,5 @@
 from constants import MAXX
+from copy import deepcopy
 
 class shape(object):
     """
@@ -11,6 +12,7 @@ class shape(object):
         Initialise the shape base.
         """
         self.coords = coords
+        self.init_coords = deepcopy(coords)
         self.color = color
 
     def translated_positions(self, direction, coords = None):
