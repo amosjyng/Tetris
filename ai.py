@@ -22,10 +22,11 @@ class AI(Thread):
         the queue that this game allows for
         """
 
-        shape = game.shape # not the original game piece anymore, so no worries altering this
+        shape = game.currentShape # not the original game piece anymore,
+        # so no worries altering this
         best_score = -999999
         best_moves = (0,0)
-        for orientation in range(game.shape.orientations):
+        for orientation in range(game.currentShape.orientations):
             rotated_game = game
             rotated_game.move_all_the_way("left")
             if orientation is not 0: # don't "rotate" for first orientation
@@ -54,7 +55,7 @@ class AI(Thread):
 
                 translated_game.undo() # now it's back at the top
 
-            rotated_game.shape.coords = deepcopy(rotated_game.shape.init_coords)
+            rotated_game.currentShape.coords = deepcopy(rotated_game.currentShape.init_coords)
 
         return best_score, best_moves
 
@@ -65,7 +66,7 @@ class AI(Thread):
             self.game.move_all_the_way("left")
             for _ in range(best_move[0]): # the orientation
                 self.game.move_all_the_way("left")
-                self.game.shape.rotate()
+                self.game.currentShape.rotate()
             for _ in range(best_move[1]): # the position
                 self.game.handle_move("right")
 

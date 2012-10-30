@@ -104,7 +104,7 @@ class GameWindow(Thread):
 
     def update_display(self):
         self.show_score(self.game.score, self.game.level)
-        self.canvas.draw(self.game.shape)
+        self.canvas.draw(self.game.currentShape)
         if self.game.paused:
             self.canvas.display_text("PAUSED")
         elif self.game.game_over:

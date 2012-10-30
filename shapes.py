@@ -111,7 +111,7 @@ class shape_limited_rotate( shape ):
 
     def rotate(self, clockwise=True):
         """
-        Clockwise, is used to indicate if the shape should rotate clockwise
+        Clockwise, is used to indicate if the currentShape should rotate clockwise
         or back again anti-clockwise. It is toggled.
         """
         super(shape_limited_rotate, self).rotate(clockwise=self.clockwise)

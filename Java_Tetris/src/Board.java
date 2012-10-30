@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class Board
 {
-    private int max_x = Constants.MAXX();
-    private int max_y = Constants.MAXY();
+    private int max_x = Constants.MAXX;
+    private int max_y = Constants.MAXY;
     private ArrayList<ArrayList<String>> landed = new ArrayList<ArrayList<String>>();
 
     Board()
