@@ -36,4 +36,12 @@ public class Board
             System.out.println();
         }
     }
+
+    public void addBlocksAt(ArrayList<Coordinate> coordinates, String color)
+    {
+        for(Coordinate coord : coordinates)
+        {
+            landed.get(coord.x).set(coord.y, color);
+        }
+    }
 }
