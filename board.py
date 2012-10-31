@@ -52,7 +52,7 @@ class Board(object):
 
         return overhang
 
-    def check_for_complete_rows(self):
+    def remove_completed_rows(self):
         """
         Look for a complete row of blocks, from the bottom up until the top row
         or until an empty row is reached.
@@ -60,6 +60,7 @@ class Board(object):
         deleted_rows = []
         empty_row = 0
 
+        # todo: refactor to be simpler, like Java implementation?
         # find the first empty row
         for y in range(self.max_y - 1, -1, -1):
             row_is_empty = True
@@ -123,7 +124,7 @@ class Board(object):
         else:
             return True
 
-    def are_empty(self, coords):
+    def are_valid(self, coords):
         """
         Checks to see if the board is empty at all the specified coordinates
         """

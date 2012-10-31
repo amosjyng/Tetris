@@ -37,11 +37,94 @@ public class Board
         }
     }
 
+    private boolean isValid(Coordinate coordinate)
+    {
+        // first check if it's not out of bounds
+        if(coordinate.x < 0 || coordinate.x >= max_x || coordinate.y < 0 || coordinate.y >= max_y)
+        {
+            return false;
+        } // then check if it's already occupied by a spot on the board
+        else if(!landed.get(coordinate.x).get(coordinate.y).isEmpty())
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+
+    public boolean areValid(ArrayList<Coordinate> coordinates)
+    {
+        for(Coordinate coordinate : coordinates)
+        {
+            if(!isValid(coordinate))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean areEmpty(ArrayList<Coordinate> coordinates) // weaker check than areValid
+    {
+        for(Coordinate coordinate : coordinates)
+        {
+            if(!landed.get(coordinate.x).get(coordinate.y).isEmpty())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void addBlocksAt(ArrayList<Coordinate> coordinates, String color)
     {
-        for(Coordinate coord : coordinates)
+        for(Coordinate coordinate : coordinates)
         {
-            landed.get(coord.x).set(coord.y, color);
+            landed.get(coordinate.x).set(coordinate.y, color);
         }
+    }
+
+    private void removeRow(int row)
+    {
+        for(int y = row; y > 0; y--)
+        {
+            for(int x = 0; x < max_x; x++)
+            {
+                landed.get(x).set(y, landed.get(x).get(y - 1));
+            }
+        }
+        for(int x = 0; x < max_x; x++) // clear top row
+        {
+            landed.get(0).set(x, new String());
+        }
+    }
+
+    private boolean isRowFull(int row)
+    {
+        for(int x = 0; x < max_x; x++)
+        {
+            if(landed.get(x).get(row).isEmpty())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public ArrayList<Integer> clearCompletedRows()
+    {
+        ArrayList<Integer> removedRows = new ArrayList<Integer>();
+        for(int y = max_y - 1; y >= 0; y--)
+        {
+            if(isRowFull(y))
+            {
+                removedRows.add(y);
+                removeRow(y);
+            }
+        }
+        return removedRows;
     }
 }

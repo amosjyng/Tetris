@@ -83,16 +83,22 @@ class game_controller():
         """
         See if the current shape can be moved in that direction
         """
-        return self.board.are_empty(self.currentShape.translated_positions(direction_d[direction]))
+        return self.board.are_valid(self.currentShape.translated_positions(direction_d[direction]))
 
     def check_rotate(self, direction):
         """
         See if the current shape can be rotated in that direction
         """
-        return self.board.are_empty(self.currentShape.rotated_positions(direction))
+        return self.board.are_valid(self.currentShape.rotated_positions(direction))
+
+    def update_level(self):
+        if self.level < NO_OF_LEVELS and self.score >= self.thresholds[self.level]:
+            self.level += 1
+            self.delay -= 100
 
     def update_score(self, rows_cleared):
         self.score += 100 * rows_cleared * rows_cleared
+        self.update_level()
 
     def backup(self):
         new_backup_info = {} # todo: make this a dictionary literal
@@ -114,22 +120,17 @@ class game_controller():
     def land_shape(self):
         self.backup()
         self.board.add_blocks_at(self.currentShape.coords, self.currentShape.color)
-        deleted_rows = self.board.check_for_complete_rows()
-        self.update_score(len(deleted_rows))
+        completed_rows = self.board.remove_completed_rows()
+        self.update_score(len(completed_rows))
         self.currentShape = self.get_next_shape()
 
-        if not self.board.are_empty(self.currentShape.coords): # can't place any more shapes,
+        if not self.board.are_valid(self.currentShape.coords): # can't place any more shapes,
             # player has lost!
             if not self.under_simulation:
                 self.board.add_blocks_at(self.currentShape.coords, self.currentShape.color)
             self.game_over = True
 
-        # do we go up a level?
-        if self.level < NO_OF_LEVELS and self.score >= self.thresholds[self.level]:
-            self.level += 1
-            self.delay -= 100
-
-        return deleted_rows
+        return completed_rows
 
     def handle_move(self, direction):
         if self.paused or self.game_over:
@@ -147,7 +148,7 @@ class game_controller():
         if not self.paused and self.check_rotate(clockwise):
             self.currentShape.coords = self.currentShape.rotated_positions(clockwise)
 
-    def move_all_the_way(self, direction):
+    def move_all_the_way(self, direction): # todo: refactor simpler like Java implementation
         drop_distance = 0
         while self.check_move(direction):
             self.handle_move(direction)

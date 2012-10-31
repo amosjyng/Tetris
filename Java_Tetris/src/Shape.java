@@ -36,6 +36,29 @@ public class Shape
         return name;
     }
 
+    public ArrayList<Coordinate> getTranslatedCoordinates(Direction direction) throws Exception
+    {
+        ArrayList<Coordinate> translatedCoordinates = new ArrayList<Coordinate>();
+        for(Coordinate coordinate : coordinates)
+        {
+            translatedCoordinates.add(coordinate.translate(direction));
+        }
+        return translatedCoordinates;
+    }
+
+    public void translate(Direction direction) throws Exception
+    {
+        for(int i = 0; i < coordinates.size(); i++)
+        {
+            /*
+            note: should I implement an actual translate function in Coordinate that actually modifies the Coordinate
+            instead of creating another copy of the coordinate? Could this prevent messy issues later on with cloning
+            a Shape?
+             */
+            coordinates.set(i, coordinates.get(i).translate(direction));
+        }
+    }
+
     public static Shape randomShape() throws Exception // note: is a switch statement really the best way to do this?
     {
         switch (random.nextInt(7))
