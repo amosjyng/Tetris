@@ -24,13 +24,14 @@ public class Board
         {
             for(int x = 0; x < max_x; x++)
             {
-                if(landed.get(x).get(y).isEmpty())
+                String square = landed.get(x).get(y);
+                if(square.isEmpty())
                 {
                     System.out.print(". ");
                 }
                 else
                 {
-                    System.out.print("X ");
+                    System.out.print(square.charAt(0) + " ");
                 }
             }
             System.out.println();
