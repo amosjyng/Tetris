@@ -10,7 +10,7 @@ public class Shape
 
     private static Random random = new Random();
 
-    Shape(String shapeName, ArrayList<Coordinate> coords, String initColor)
+    public Shape(String shapeName, ArrayList<Coordinate> coords, String initColor)
     {
         coordinates = coords;
         for(Coordinate coord : coords)

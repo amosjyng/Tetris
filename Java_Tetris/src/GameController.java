@@ -12,7 +12,7 @@ public class GameController
     private boolean paused = false;
     private boolean gameOver = false;
 
-    GameController()
+    public GameController()
     {
         for(int i = 1; i < Constants.MAX_LEVELS; i++)
         {
@@ -134,7 +134,7 @@ public class GameController
     }
 
     // Returns whether it is useful to keep moving the piece in this direction
-    private boolean tryMove(Direction direction)
+    public boolean tryMove(Direction direction)
     {
         if(checkMove(direction))
         {

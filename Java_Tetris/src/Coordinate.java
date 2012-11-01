@@ -3,7 +3,7 @@ public class Coordinate
     public int x;
     public int y;
 
-    Coordinate(int xPos, int yPos)
+    public Coordinate(int xPos, int yPos)
     {
         x = xPos;
         y = yPos;

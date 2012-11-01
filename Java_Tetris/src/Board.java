@@ -6,7 +6,7 @@ public class Board
     private int max_y = Constants.MAXY;
     private ArrayList<ArrayList<String>> landed = new ArrayList<ArrayList<String>>();
 
-    Board()
+    public Board()
     {
         for(int x = 0; x < max_x; x++)
         {

@@ -1,10 +1,72 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class TetrisCanvas extends JPanel
 {
     private GameController game;
     private Board board;
+
+    static class Repainter implements ActionListener
+    {
+        TetrisCanvas canvas;
+
+        public Repainter(TetrisCanvas tetrisCanvas)
+        {
+            canvas = tetrisCanvas;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent)
+        {
+            canvas.repaint();
+        }
+    }
+
+    public TetrisCanvas()
+    {
+        new Timer(100, new Repainter(this)).start();
+        addKeyListener(new KeyListener()
+        {
+            @Override
+            public void keyTyped(KeyEvent keyEvent)
+            {
+                // nothing to do...
+            }
+
+            @Override
+            public void keyPressed(KeyEvent keyEvent)
+            {
+                switch (keyEvent.getKeyCode())
+                {
+                    case KeyEvent.VK_UP:
+                        keyUpPressed();
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        keyUpPressed();
+                        break;
+                    case KeyEvent.VK_LEFT:
+                        keyLeftPressed();
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        keyRightPressed();
+                        break;
+                    default:
+                        System.err.println("Key " + keyEvent.getKeyCode() + " not recognized");
+                        break;
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent)
+            {
+                // nothing to do...
+            }
+        });
+    }
 
     public void attach(GameController gameController)
     {
@@ -16,6 +78,38 @@ public class TetrisCanvas extends JPanel
     public Dimension getPreferredSize()
     {
         return new Dimension(Constants.MAXX * Constants.SQUARE_SIZE, Constants.MAXY * Constants.SQUARE_SIZE);
+    }
+
+    private void keyUpPressed()
+    {
+        if(game != null)
+        {
+            game.moveAllTheWay(Direction.DOWN);
+        }
+    }
+
+    private void keyDownPressed()
+    {
+        if(game != null)
+        {
+            game.tryMove(Direction.DOWN);
+        }
+    }
+
+    private void keyLeftPressed()
+    {
+        if(game != null)
+        {
+            game.tryMove(Direction.LEFT);
+        }
+    }
+
+    private void keyRightPressed()
+    {
+        if(game != null)
+        {
+            game.tryMove(Direction.RIGHT);
+        }
     }
 
     private Color getColor(String colorName) throws Exception
@@ -30,7 +124,7 @@ public class TetrisCanvas extends JPanel
         }
         else if(colorName.equals("yellow"))
         {
-            return Color.yellow;
+            return Color.yellow.darker(); // yellow is too bright by default
         }
         else if(colorName.equals("orange"))
         {

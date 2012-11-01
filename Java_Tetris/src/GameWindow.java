@@ -5,7 +5,7 @@ public class GameWindow
     JFrame gameFrame = new JFrame("Java Tetris");
     TetrisCanvas canvas = new TetrisCanvas();
 
-    GameWindow()
+    public GameWindow()
     {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -24,6 +24,7 @@ public class GameWindow
     {
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.add(canvas);
+        canvas.setFocusable(true);
         gameFrame.pack();
         gameFrame.setVisible(true);
     }
