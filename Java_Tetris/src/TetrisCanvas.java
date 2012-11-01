@@ -46,7 +46,7 @@ public class TetrisCanvas extends JPanel
                         keyUpPressed();
                         break;
                     case KeyEvent.VK_DOWN:
-                        keyUpPressed();
+                        keyDownPressed();
                         break;
                     case KeyEvent.VK_LEFT:
                         keyLeftPressed();
