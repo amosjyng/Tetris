@@ -42,6 +42,16 @@ public class GameController
         return gameOver;
     }
 
+    public Board getBoard()
+    {
+        return board;
+    }
+
+    public Shape getCurrentShape()
+    {
+        return currentShape;
+    }
+
     private void addShapeToQueue()
     {
         try

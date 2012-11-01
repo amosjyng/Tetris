@@ -38,6 +38,11 @@ public class Board
         }
     }
 
+    public String getSquare(int x, int y)
+    {
+        return landed.get(x).get(y);
+    }
+
     private boolean isValid(Coordinate coordinate)
     {
         // first check if it's not out of bounds
