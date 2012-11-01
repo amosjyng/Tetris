@@ -65,22 +65,9 @@ public class GameController
         }
     }
 
-    public boolean checkMove(Direction direction)
+    public boolean checkValidMove(ArrayList<Coordinate> newCoordinates)
     {
-        try
-        {
-            return board.areValid(currentShape.getTranslatedCoordinates(direction));
-        }
-        catch (Exception e)
-        {
-            System.err.println("Error checking translated shape!");
-            e.printStackTrace();
-            System.exit(101);
-        }
-        // I am DAMN sure that either it returns whether it was valid, or it exists the program
-        // I mean, that's what System.exit does, right? But it still wants a return value
-        // Okay, fine
-        return false;
+        return board.areValid(newCoordinates);
     }
 
     private void updateLevel()
@@ -119,30 +106,13 @@ public class GameController
         gameOver = checkGameOver();
     }
 
-    private void move(Direction direction)
-    {
-        try
-        {
-            currentShape.translate(direction);
-        }
-        catch (Exception e)
-        {
-            System.err.println("Error translating current shape!");
-            e.printStackTrace();
-            System.exit(102);
-        }
-    }
-
     // Returns whether it is useful to keep moving the piece in this direction
     public boolean tryMove(Direction direction)
     {
-        if(checkMove(direction))
+        ArrayList<Coordinate> newCoordinates = currentShape.getTranslatedCoordinates(direction);
+        if(checkValidMove(newCoordinates))
         {
-            /*
-            Possible performance issue: it has already checked whether the coordinates to move to are already occupied,
-            so we don't need to generate the new coordinates AGAIN
-             */
-            move(direction);
+            currentShape.setCoordinates(newCoordinates);
             return true;
         }
         else
@@ -151,6 +121,20 @@ public class GameController
             {
                 landShape();
             }
+            return false;
+        }
+    }
+
+    public Boolean tryRotate()
+    {
+        ArrayList<Coordinate> newCoordinates = currentShape.getRotatedCoordinates();
+        if(checkValidMove(newCoordinates))
+        {
+            currentShape.setCoordinates(newCoordinates);
+            return true;
+        }
+        else
+        {
             return false;
         }
     }

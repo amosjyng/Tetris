@@ -15,20 +15,25 @@ public class Coordinate
         return new Coordinate(x, y);
     }
 
-    public Coordinate translate(Direction direction) throws Exception
+    public Coordinate translate(Direction direction)
+    {
+        return translate(direction, 1);
+    }
+
+    public Coordinate translate(Direction direction, int howMuch)
     {
         switch (direction)
         { // note: assuming positive y axis points downwards
             case UP:
-                return new Coordinate(x, y - 1);
+                return new Coordinate(x, y - howMuch);
             case DOWN:
-                return new Coordinate(x, y + 1);
+                return new Coordinate(x, y + howMuch);
             case LEFT:
-                return new Coordinate(x - 1, y);
+                return new Coordinate(x - howMuch, y);
             case RIGHT:
-                return new Coordinate(x + 1, y);
+                return new Coordinate(x + howMuch, y);
             default:
-                throw new Exception("Unrecognized direction " + direction);
+                throw new RuntimeException("Unrecognized direction " + direction);
         }
     }
 }

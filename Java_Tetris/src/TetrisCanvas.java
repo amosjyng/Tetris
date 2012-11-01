@@ -54,6 +54,9 @@ public class TetrisCanvas extends JPanel
                     case KeyEvent.VK_RIGHT:
                         keyRightPressed();
                         break;
+                    case KeyEvent.VK_A:
+                        keyRotatePressed();
+                        break;
                     default:
                         System.err.println("Key " + keyEvent.getKeyCode() + " not recognized");
                         break;
@@ -109,6 +112,14 @@ public class TetrisCanvas extends JPanel
         if(game != null)
         {
             game.tryMove(Direction.RIGHT);
+        }
+    }
+
+    private void keyRotatePressed()
+    {
+        if(game != null)
+        {
+            game.tryRotate();
         }
     }
 

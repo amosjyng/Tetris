@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Shape
@@ -26,6 +28,11 @@ public class Shape
         return coordinates;
     }
 
+    public void setCoordinates(ArrayList<Coordinate> newCoordinates)
+    {
+        coordinates = newCoordinates;
+    }
+
     public String getColor()
     {
         return color;
@@ -36,17 +43,85 @@ public class Shape
         return name;
     }
 
-    public ArrayList<Coordinate> getTranslatedCoordinates(Direction direction) throws Exception
+    private Map<String, Integer> getMostExtremePositions(ArrayList<Coordinate> positions)
+    {
+        int leftmost = 0, rightmost = Constants.MAXX - 1, topmost = 0;
+        for(Coordinate coordinate : positions)
+        {
+            if(coordinate.y < topmost)
+            {
+                topmost = coordinate.y;
+            }
+            if(coordinate.x < leftmost)
+            {
+                leftmost = coordinate.x;
+            }
+            else if(coordinate.x > rightmost)
+            {
+                rightmost = coordinate.x;
+            }
+        }
+
+        Map<String, Integer> extremePositions = new HashMap<String, Integer>();
+        extremePositions.put("leftmost", leftmost);
+        extremePositions.put("rightmost", rightmost);
+        extremePositions.put("topmost", topmost);
+
+        return extremePositions;
+    }
+
+    public ArrayList<Coordinate> getTranslatedCoordinates(Direction direction)
+    {
+        return getTranslatedCoordinates(coordinates, direction, 1);
+    }
+
+    private ArrayList<Coordinate> getTranslatedCoordinates(ArrayList<Coordinate> coordinateArrayList,
+                                                           Direction direction, int howMuch)
     {
         ArrayList<Coordinate> translatedCoordinates = new ArrayList<Coordinate>();
-        for(Coordinate coordinate : coordinates)
+        for(Coordinate coordinate : coordinateArrayList)
         {
-            translatedCoordinates.add(coordinate.translate(direction));
+            translatedCoordinates.add(coordinate.translate(direction, howMuch));
         }
         return translatedCoordinates;
     }
 
-    public void translate(Direction direction) throws Exception
+    public ArrayList<Coordinate> getRotatedCoordinates() // rotates clockwise
+    { // todo: check middle squares!
+        Coordinate middle = coordinates.get(0);
+        ArrayList<Coordinate> relativeCoordinates = new ArrayList<Coordinate>();
+        for(Coordinate coordinate : coordinates)
+        {
+            relativeCoordinates.add(new Coordinate(coordinate.x - middle.x, coordinate.y - middle.y));
+        }
+
+        ArrayList<Coordinate> rotatedCoordinates = new ArrayList<Coordinate>();
+        for(int i = 0; i < coordinates.size(); i++)
+        {
+            rotatedCoordinates.add(new Coordinate(middle.x + relativeCoordinates.get(i).y,
+                                                  middle.y - relativeCoordinates.get(i).x));
+        }
+
+        // allow shape to be rotated even when next to edges of board
+        Map<String, Integer> extremePositions = getMostExtremePositions(rotatedCoordinates);
+        if(extremePositions.get("leftmost") < 0)
+        {
+            return getTranslatedCoordinates(rotatedCoordinates, Direction.RIGHT, -extremePositions.get("leftmost"));
+        }
+        else if(extremePositions.get("rightmost") >= Constants.MAXX)
+        {
+            return getTranslatedCoordinates(rotatedCoordinates, Direction.LEFT,
+                                            extremePositions.get("rightmost") - Constants.MAXX + 1);
+        }
+        if(extremePositions.get("topmost") < 0)
+        {
+            return getTranslatedCoordinates(rotatedCoordinates, Direction.DOWN, -extremePositions.get("topmost"));
+        }
+
+        return rotatedCoordinates; // otherwise we're done!
+    }
+
+    public void translate(Direction direction)
     {
         for(int i = 0; i < coordinates.size(); i++)
         {
