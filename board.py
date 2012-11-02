@@ -152,7 +152,7 @@ class Board(object):
         for deleted_row in deleted_rows: # go through each already-deleted row
             for column in range(self.max_x): # and go through each column
                 # and then shift each block in that column up by 1
-                for row in range(0, deleted_row, +1):
+                for row in range(deleted_row):
                     if self.landed.has_key((column, row + 1)):
                         self.landed[(column, row)] = self.landed.pop((column, row + 1))
 

@@ -147,15 +147,15 @@ public class Board
 
     public void restore(ArrayList<Integer> removedRows, Shape landedShape)
     {
-        for(int removedRow : removedRows)
+        for(int i = removedRows.size() - 1; i >= 0; i--)
         {
             for(int x = 0; x < max_x; x++)
             {
-                for(int y = 0; y < removedRow; y++)
+                for(int y = 0; y < removedRows.get(i); y++)
                 {
                     landed.get(x).set(y, landed.get(x).get(y + 1));
                 }
-                landed.get(x).set(removedRow, Constants.REMOVED_SQUARE_COLOR);
+                landed.get(x).set(removedRows.get(i), Constants.REMOVED_SQUARE_COLOR);
             }
         }
         removeBlocksAt(landedShape.getCoordinates());
