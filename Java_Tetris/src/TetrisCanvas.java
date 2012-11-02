@@ -23,8 +23,8 @@ public class TetrisCanvas extends JPanel
             {
                 switch (keyEvent.getKeyCode())
                 {
-                    case KeyEvent.VK_UP:
-                        keyUpPressed();
+                    case KeyEvent.VK_SPACE:
+                        keyAllTheWayDownPressed();
                         break;
                     case KeyEvent.VK_DOWN:
                         keyDownPressed();
@@ -35,7 +35,7 @@ public class TetrisCanvas extends JPanel
                     case KeyEvent.VK_RIGHT:
                         keyRightPressed();
                         break;
-                    case KeyEvent.VK_A:
+                    case KeyEvent.VK_UP:
                         keyRotatePressed();
                         break;
                     case KeyEvent.VK_P:
@@ -70,7 +70,7 @@ public class TetrisCanvas extends JPanel
         return new Dimension(Constants.MAXX * Constants.SQUARE_SIZE, Constants.MAXY * Constants.SQUARE_SIZE);
     }
 
-    private void keyUpPressed()
+    private void keyAllTheWayDownPressed()
     {
         if(game != null)
         {

@@ -83,9 +83,9 @@ class GameWindow(Thread):
     def attach(self, game_controller):
         self.parent.bind("<Left>", game_controller.left_callback)
         self.parent.bind("<Right>", game_controller.right_callback)
-        self.parent.bind("<Up>", game_controller.up_callback)
+        self.parent.bind("<Key-space>", game_controller.up_callback)
         self.parent.bind("<Down>", game_controller.down_callback)
-        self.parent.bind("a", game_controller.a_callback)
+        self.parent.bind("<Up>", game_controller.a_callback)
         self.parent.bind("s", game_controller.s_callback)
         self.parent.bind("p", game_controller.p_callback)
         self.parent.bind('u', self.u_callback)
