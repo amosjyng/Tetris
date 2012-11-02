@@ -142,13 +142,16 @@ public class GameController
 
     private void landShape()
     {
-        Shape currentShapeBackup = currentShape;
+        UndoInformation newMove = new UndoInformation(score, level, currentShape);
+
         board.addBlocksAt(currentShape.getCoordinates(), currentShape.getColor());
         ArrayList<Integer> completedRows = board.clearCompletedRows();
         updateScore(completedRows.size());
         currentShape = popNextShapeFromQueue();
         gameOver = checkGameOver();
-        undoInformation.add(new UndoInformation(score, level, currentShapeBackup, completedRows));
+
+        newMove.setRemovedRows(completedRows);
+        undoInformation.add(newMove);
     }
 
     // Returns whether it is useful to keep moving the piece in this direction

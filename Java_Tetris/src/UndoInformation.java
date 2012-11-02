@@ -7,12 +7,11 @@ public class UndoInformation
     private Shape shape;
     private ArrayList<Integer> removedRows;
 
-    public UndoInformation(int currentScore, int currentLevel, Shape landedShape, ArrayList<Integer> toBeRemovedRows)
+    public UndoInformation(int currentScore, int currentLevel, Shape landedShape)
     {
         score = currentScore;
         level = currentLevel;
         shape = landedShape;
-        removedRows = toBeRemovedRows;
     }
 
     public int getPreviousScore() // read-only access
@@ -28,6 +27,18 @@ public class UndoInformation
     public Shape getPreviousShape()
     {
         return shape;
+    }
+
+    public void setRemovedRows(ArrayList<Integer> newlyRemovedRows)
+    {
+        if(removedRows == null)
+        {
+            removedRows = newlyRemovedRows;
+        }
+        else
+        {
+            throw new RuntimeException("Removed rows being set more than once!");
+        }
     }
 
     public ArrayList<Integer> getRemovedRows()
