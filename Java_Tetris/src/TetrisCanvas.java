@@ -185,6 +185,19 @@ public class TetrisCanvas extends JPanel
         }
     }
 
+    private void displayText(Graphics g, String text)
+    {
+        g.setColor(Color.black);
+        int xPos = 0, yPos = (Constants.MAXY / 2) * Constants.SQUARE_SIZE;
+        g.fillRect(xPos, yPos - 1 * Constants.SQUARE_SIZE,
+                   Constants.MAXX * Constants.SQUARE_SIZE, 3 * Constants.SQUARE_SIZE);
+        Font font = new Font("Helvetica", Font.BOLD, 16);
+        g.setFont(font);
+        g.setColor(Color.red);
+        g.drawString(text, xPos + 3 * Constants.SQUARE_SIZE,
+                     (int)Math.round(yPos + 0.5 * Constants.SQUARE_SIZE));
+    }
+
     @Override
     public void paintComponent(Graphics g)
     {
@@ -204,6 +217,11 @@ public class TetrisCanvas extends JPanel
             for(Coordinate coordinate : currentShape.getCoordinates())
             {
                 displaySquare(g, coordinate.x, coordinate.y, currentShape.getColor());
+            }
+
+            if(game.gameOver())
+            {
+                displayText(g, "GAME OVER");
             }
         }
     }

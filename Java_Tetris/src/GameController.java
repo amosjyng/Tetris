@@ -109,6 +109,10 @@ public class GameController
     // Returns whether it is useful to keep moving the piece in this direction
     public boolean tryMove(Direction direction)
     {
+        if(gameOver || paused)
+        {
+            return false;
+        }
         ArrayList<Coordinate> newCoordinates = currentShape.getTranslatedCoordinates(direction);
         if(checkValidMove(newCoordinates))
         {
@@ -127,6 +131,10 @@ public class GameController
 
     public Boolean tryRotate()
     {
+        if(gameOver || paused)
+        {
+            return false;
+        }
         ArrayList<Coordinate> newCoordinates = currentShape.getRotatedCoordinates();
         if(checkValidMove(newCoordinates))
         {

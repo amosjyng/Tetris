@@ -61,7 +61,9 @@ class BoardCanvas(Frame):
         y = self.board.max_y / 2
         rx = (x * self.scale) + self.offset
         ry = (y * self.scale) + self.offset
-        self.canvas.create_rectangle(0, ry - self.scale, self.board.max_x * self.scale + self.offset, ry + self.scale, fill = "black")
+        self.canvas.create_rectangle(0, ry - self.scale,
+                                     self.board.max_x * self.scale + self.offset, ry + self.scale,
+                                     fill = "black")
         self.canvas.create_text(rx, ry, text = display_text, fill = "red", font = ("Helvetica", 16))
 
 class GameWindow(Thread):
