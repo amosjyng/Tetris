@@ -57,6 +57,9 @@ public class TetrisCanvas extends JPanel
                     case KeyEvent.VK_A:
                         keyRotatePressed();
                         break;
+                    case KeyEvent.VK_P:
+                        keyPausePressed();
+                        break;
                     default:
                         System.err.println("Key " + keyEvent.getKeyCode() + " not recognized");
                         break;
@@ -120,6 +123,14 @@ public class TetrisCanvas extends JPanel
         if(game != null)
         {
             game.tryRotate();
+        }
+    }
+
+    private void keyPausePressed()
+    {
+        if(game != null)
+        {
+            game.togglePause();
         }
     }
 
@@ -222,6 +233,10 @@ public class TetrisCanvas extends JPanel
             if(game.gameOver())
             {
                 displayText(g, "GAME OVER");
+            }
+            else if(game.paused())
+            {
+                displayText(g, "PAUSED");
             }
         }
     }

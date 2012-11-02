@@ -42,6 +42,16 @@ public class GameController
         return gameOver;
     }
 
+    public boolean paused()
+    {
+        return paused;
+    }
+
+    public void togglePause()
+    {
+        paused = !paused;
+    }
+
     public Board getBoard()
     {
         return board;
