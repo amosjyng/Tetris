@@ -45,7 +45,7 @@ public class GameWindow
         if(game != null)
         {
             scoreLabel.setText("Score: " + game.getScore());
-            levelLabel.setText("Level: " + game.getLevel());
+            levelLabel.setText("Level: " + (game.getLevel() + 1));
         }
     }
 
