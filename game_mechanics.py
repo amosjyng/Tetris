@@ -56,7 +56,7 @@ class game_controller():
         self.currentShape = self.get_next_shape()
         self.paused = False
         self.game_over = False
-        self.backup_info = []
+        self.undo_list = []
 
     def create_copy(self):
         """
@@ -106,10 +106,10 @@ class game_controller():
         new_backup_info['shape'] = self.currentShape
         new_backup_info['deleted_rows'] = []
         new_backup_info['drop_distance'] = 0
-        self.backup_info.append(new_backup_info)
+        self.undo_list.append(new_backup_info)
 
     def undo(self):
-        last_move = self.backup_info.pop()
+        last_move = self.undo_list.pop()
         self.shapes_queue.insert(0, self.currentShape)
         self.score = last_move['score']
         self.currentShape = last_move['shape']
@@ -160,10 +160,10 @@ class game_controller():
             if result is None:
                 print 'uh oh, game over, something bad has happened. losing piece was at {0}' \
                         .format(self.currentShape.coords)
-                self.backup_info.pop() # we don't need the latest move, since it never happened
+                self.undo_list.pop() # we don't need the latest move, since it never happened
             else:
-                self.backup_info[-1]['drop_distance'] = drop_distance
-                self.backup_info[-1]['deleted_rows']  = result
+                self.undo_list[-1]['drop_distance'] = drop_distance
+                self.undo_list[-1]['deleted_rows']  = result
 
     def left_callback( self, event ):
         if self.currentShape:

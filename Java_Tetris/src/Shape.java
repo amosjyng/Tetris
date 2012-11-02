@@ -165,7 +165,7 @@ public class Shape
         squareCoords.add(new Coordinate(5, 0));
         squareCoords.add(new Coordinate(4, 1));
         squareCoords.add(new Coordinate(5, 1));
-        return new Shape("Square", squareCoords, "red");
+        return new Shape("Square", squareCoords, "red"); // todo: put these colors in constants?
     }
 
     public static Shape t()

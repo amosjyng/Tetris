@@ -41,6 +41,9 @@ public class TetrisCanvas extends JPanel
                     case KeyEvent.VK_P:
                         keyPausePressed();
                         break;
+                    case KeyEvent.VK_U:
+                        keyUndoPressed();
+                        break;
                     default:
                         System.err.println("Key " + keyEvent.getKeyCode() + " not recognized");
                         break;
@@ -115,6 +118,21 @@ public class TetrisCanvas extends JPanel
         }
     }
 
+    private void keyUndoPressed()
+    {
+        if(game != null)
+        {
+            try
+            {
+                game.undo();
+            }
+            catch (Exception e)
+            {
+                System.out.println("No more moves left to undo!");
+            }
+        }
+    }
+
     private Color getColor(String colorName) throws Exception
     {
         if(colorName.isEmpty())
@@ -148,6 +166,10 @@ public class TetrisCanvas extends JPanel
         else if(colorName.equals("magenta"))
         {
             return Color.magenta;
+        }
+        else if(colorName.equals("gray"))
+        {
+            return Color.gray;
         }
         else
         {

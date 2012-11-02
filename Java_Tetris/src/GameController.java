@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Map;
 
 public class GameController
 {
@@ -11,12 +12,13 @@ public class GameController
     private ArrayList<Shape> shapesQueue = new ArrayList<Shape>(); // todo: make an actual queue...?
     private boolean paused = false;
     private boolean gameOver = false;
+    private ArrayList<UndoInformation> undoInformation = new ArrayList<UndoInformation>();
 
     public GameController()
     {
         for(int i = 1; i < Constants.MAX_LEVELS; i++)
         {
-            levelThresholds.add((int)Math.pow(2, (double)i) * 100);
+            levelThresholds.add((int) Math.pow(2, (double) i) * 100);
         }
         for(int i = 0; i < Constants.SHAPES_QUEUE_SIZE; i++)
         {
@@ -60,6 +62,27 @@ public class GameController
     public void togglePause()
     {
         paused = !paused;
+    }
+
+    public void undo() throws Exception
+    {
+        if(undoInformation.size() == 0)
+        {
+            throw new Exception("Undo information size is zero!");
+        }
+        else
+        {
+            UndoInformation lastMove = undoInformation.get(undoInformation.size() - 1);
+            undoInformation.remove(undoInformation.size() - 1);
+
+            score = lastMove.getPreviousScore();
+            level = lastMove.getPreviousLevel();
+            board.restore(lastMove.getRemovedRows(), lastMove.getPreviousShape());
+            shapesQueue.add(0, currentShape);
+            currentShape = lastMove.getPreviousShape();
+            moveAllTheWay(Direction.UP);
+            gameOver = false;
+        }
     }
 
     public Board getBoard()
@@ -119,11 +142,13 @@ public class GameController
 
     private void landShape()
     {
+        Shape currentShapeBackup = currentShape;
         board.addBlocksAt(currentShape.getCoordinates(), currentShape.getColor());
         ArrayList<Integer> completedRows = board.clearCompletedRows();
         updateScore(completedRows.size());
         currentShape = popNextShapeFromQueue();
         gameOver = checkGameOver();
+        undoInformation.add(new UndoInformation(score, level, currentShapeBackup, completedRows));
     }
 
     // Returns whether it is useful to keep moving the piece in this direction

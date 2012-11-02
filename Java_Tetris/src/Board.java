@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class Board
 {
-    private int max_x = Constants.MAXX;
-    private int max_y = Constants.MAXY;
+    private int max_x = Constants.MAXX; // do we even need this max_x and max_y?
+    private int max_y = Constants.MAXY; // seems really redundant
     private ArrayList<ArrayList<String>> landed = new ArrayList<ArrayList<String>>();
 
     public Board()
@@ -93,6 +93,14 @@ public class Board
         }
     }
 
+    private void removeBlocksAt(ArrayList<Coordinate> coordinates)
+    {
+        for(Coordinate coordinate : coordinates)
+        {
+            landed.get(coordinate.x).set(coordinate.y, "");
+        }
+    }
+
     private void removeRow(int row)
     {
         for(int y = row; y > 0; y--)
@@ -135,5 +143,21 @@ public class Board
             removeRow(y);
         }
         return removedRows;
+    }
+
+    public void restore(ArrayList<Integer> removedRows, Shape landedShape)
+    {
+        for(int removedRow : removedRows)
+        {
+            for(int x = 0; x < max_x; x++)
+            {
+                for(int y = 0; y < removedRow; y++)
+                {
+                    landed.get(x).set(y, landed.get(x).get(y + 1));
+                }
+                landed.get(x).set(removedRow, Constants.REMOVED_SQUARE_COLOR);
+            }
+        }
+        removeBlocksAt(landedShape.getCoordinates());
     }
 }
