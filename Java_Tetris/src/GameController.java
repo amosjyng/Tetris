@@ -37,6 +37,16 @@ public class GameController
         board.output();
     }
 
+    public int getScore()
+    {
+        return score;
+    }
+
+    public int getLevel()
+    {
+        return level;
+    }
+
     public boolean gameOver()
     {
         return gameOver;

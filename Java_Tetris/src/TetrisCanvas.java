@@ -10,25 +10,8 @@ public class TetrisCanvas extends JPanel
     private GameController game;
     private Board board;
 
-    static class Repainter implements ActionListener
-    {
-        TetrisCanvas canvas;
-
-        public Repainter(TetrisCanvas tetrisCanvas)
-        {
-            canvas = tetrisCanvas;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent actionEvent)
-        {
-            canvas.repaint();
-        }
-    }
-
     public TetrisCanvas()
     {
-        new Timer(100, new Repainter(this)).start();
         addKeyListener(new KeyListener()
         {
             @Override
