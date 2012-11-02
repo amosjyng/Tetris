@@ -123,13 +123,16 @@ public class Board
     public ArrayList<Integer> clearCompletedRows()
     {
         ArrayList<Integer> removedRows = new ArrayList<Integer>();
-        for(int y = max_y - 1; y >= 0; y--)
+        for(int y = 0; y < max_y; y++)
         {
             if(isRowFull(y))
             {
                 removedRows.add(y);
-                removeRow(y);
             }
+        }
+        for(int y : removedRows)
+        {
+            removeRow(y);
         }
         return removedRows;
     }
