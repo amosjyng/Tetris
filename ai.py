@@ -65,8 +65,8 @@ class AI(Thread):
             best_score, best_move = self.find_best_move(self.game.create_copy(), SHAPES_QUEUE_SIZE)
             self.game.move_all_the_way("left")
             for _ in range(best_move[0]): # the orientation
-                self.game.move_all_the_way("left")
                 self.game.currentShape.rotate()
+                self.game.move_all_the_way("left")
             for _ in range(best_move[1]): # the position
                 self.game.handle_move("right")
 

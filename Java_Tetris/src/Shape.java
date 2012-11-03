@@ -6,7 +6,6 @@ import java.util.Random;
 public class Shape
 {
     private ArrayList<Coordinate> coordinates = new ArrayList<Coordinate>();
-    private ArrayList<Coordinate> initialCoordinates = new ArrayList<Coordinate>();
     private String color;
     private String name;
 
@@ -15,12 +14,19 @@ public class Shape
     public Shape(String shapeName, ArrayList<Coordinate> coords, String initColor)
     {
         coordinates = coords;
-        for(Coordinate coord : coords)
-        {
-            initialCoordinates.add(coord.clone());
-        }
         color = initColor;
         name = shapeName;
+    }
+
+    @Override
+    public Shape clone()
+    {
+        ArrayList<Coordinate> clonedCoordinates = new ArrayList<Coordinate>();
+        for(Coordinate thisCoordinate : this.coordinates)
+        {
+            clonedCoordinates.add(thisCoordinate.clone());
+        }
+        return new Shape(this.name, clonedCoordinates, this.color);
     }
 
     public ArrayList<Coordinate> getCoordinates()

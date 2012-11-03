@@ -13,6 +13,7 @@ public class GameController
     private boolean paused = false;
     private boolean gameOver = false;
     private ArrayList<UndoInformation> undoInformation = new ArrayList<UndoInformation>();
+    private boolean underSimulation = false;
 
     public GameController()
     {
@@ -25,6 +26,24 @@ public class GameController
             addShapeToQueue();
         }
         currentShape = popNextShapeFromQueue(); // popNextShapeFromQueue will add another shape to the queue
+    }
+
+    @Override
+    public GameController clone()
+    {
+        GameController clonedGame = new GameController();
+        clonedGame.score = this.score;
+        clonedGame.level = this.level;
+        clonedGame.board = this.board.clone();
+        clonedGame.currentShape = this.currentShape.clone();
+        clonedGame.shapesQueue.clear();
+        for(Shape shape : this.shapesQueue)
+        {
+            clonedGame.shapesQueue.add(shape.clone());
+        }
+        clonedGame.underSimulation = true; // why else would you clone a game?
+
+        return clonedGame;
     }
 
     public void output() // for debugging purposes
@@ -149,6 +168,10 @@ public class GameController
         updateScore(completedRows.size());
         currentShape = popNextShapeFromQueue();
         gameOver = checkGameOver();
+        if(!underSimulation && gameOver)
+        {
+            System.out.println("Final score: " + score);
+        }
 
         newMove.setRemovedRows(completedRows);
         undoInformation.add(newMove);

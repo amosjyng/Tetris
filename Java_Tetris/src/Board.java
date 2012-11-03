@@ -18,6 +18,20 @@ public class Board
         }
     }
 
+    @Override
+    public Board clone()
+    {
+        Board newBoard = new Board();
+        for(int x = 0; x < max_x; x++)
+        {
+            for(int y = 0; y < max_y; y++)
+            {
+                newBoard.landed.get(x).set(y, this.landed.get(x).get(y));
+            }
+        }
+        return newBoard;
+    }
+
     public void output()
     {
         for(int y = 0; y < max_y; y++)

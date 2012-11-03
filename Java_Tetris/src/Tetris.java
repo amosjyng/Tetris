@@ -5,5 +5,8 @@ class Tetris
         GameController game = new GameController();
         GameWindow gameWindow = new GameWindow();
         gameWindow.attach(game);
+        AI ai = new AI();
+        ai.attach(game);
+        ai.run();
     }
 }
