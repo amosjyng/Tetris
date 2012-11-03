@@ -142,7 +142,14 @@ public class GameController
 
     private void updateScore(int completedRows)
     {
-        score += Constants.SCORE_MULTIPLIER * completedRows * completedRows;
+        if(Constants.LINEAR_SCORE_FUNCTION)
+        {
+            score += completedRows * Constants.SCORE_MULTIPLIER;
+        }
+        else
+        {
+            score += Constants.SCORE_MULTIPLIER * completedRows * completedRows;
+        }
         updateLevel();
     }
 
