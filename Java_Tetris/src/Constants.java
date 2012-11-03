@@ -17,4 +17,5 @@ public class Constants
     public static final double CURRENT_MOVE_MULTIPLIER = 1.01; // prioritize earlier gains
     public static final double GAME_SCORE_WEIGHT = 10;
     public static final double BOARD_HEIGHT_WEIGHT = -5;
+    public static final double BOARD_OVERHANGS_WEIGHT = -10;
 }

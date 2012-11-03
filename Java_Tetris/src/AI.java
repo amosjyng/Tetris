@@ -10,7 +10,8 @@ public class AI implements Runnable
     private double heuristic(GameController game)
     {
         return game.getScore() * Constants.GAME_SCORE_WEIGHT
-                + game.getBoard().getAverageHeight() * Constants.BOARD_HEIGHT_WEIGHT;
+                + game.getBoard().getAverageHeight() * Constants.BOARD_HEIGHT_WEIGHT
+                + game.getBoard().getOverhangCount() * Constants.BOARD_OVERHANGS_WEIGHT;
     }
 
     private Move findBestMove(GameController game, int iterationLevel)

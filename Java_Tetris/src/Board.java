@@ -74,6 +74,31 @@ public class Board
         return cumulativeHeight * 1.0 / totalBlocks;
     }
 
+    public int getOverhangCount()
+    {
+        int overhangs = 0;
+        for(int x = 0; x < Constants.MAXX; x++)
+        {
+            boolean encounteredSquare = false;
+            for(int y = 0; y < Constants.MAXY; y++)
+            {
+                if(landed.get(x).get(y).isEmpty())
+                {
+                    if(encounteredSquare)
+                    {
+                        overhangs++;
+                    }
+                }
+                else
+                {
+                    encounteredSquare = true;
+                }
+            }
+        }
+
+        return overhangs;
+    }
+
     private boolean isValid(Coordinate coordinate)
     {
         // first check if it's not out of bounds
