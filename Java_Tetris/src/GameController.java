@@ -19,7 +19,7 @@ public class GameController
     {
         for(int i = 1; i < Constants.MAX_LEVELS; i++)
         {
-            levelThresholds.add((int) Math.pow(2, (double) i) * 100);
+            levelThresholds.add((int) Math.pow(2, (double) i) * Constants.SCORE_MULTIPLIER);
         }
         for(int i = 0; i < Constants.SHAPES_QUEUE_SIZE; i++)
         {
@@ -142,7 +142,7 @@ public class GameController
 
     private void updateScore(int completedRows)
     {
-        score += 100 * completedRows * completedRows;
+        score += Constants.SCORE_MULTIPLIER * completedRows * completedRows;
         updateLevel();
     }
 
