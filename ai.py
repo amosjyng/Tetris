@@ -22,7 +22,7 @@ class AI(Thread):
         the queue that this game allows for
         """
 
-        shape = game.currentShape # not the original game piece anymore,
+        shape = game.currentShape
         # so no worries altering this
         best_score = -999999
         best_moves = (0,0)

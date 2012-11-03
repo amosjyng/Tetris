@@ -8,14 +8,16 @@ public class Shape
     private ArrayList<Coordinate> coordinates = new ArrayList<Coordinate>();
     private String color;
     private String name;
+    private int orientations;
 
     private static Random random = new Random();
 
-    public Shape(String shapeName, ArrayList<Coordinate> coords, String initColor)
+    public Shape(String shapeName, ArrayList<Coordinate> coords, String initColor, int numberOrientations)
     {
         coordinates = coords;
         color = initColor;
         name = shapeName;
+        orientations = numberOrientations;
     }
 
     @Override
@@ -26,7 +28,7 @@ public class Shape
         {
             clonedCoordinates.add(thisCoordinate.clone());
         }
-        return new Shape(this.name, clonedCoordinates, this.color);
+        return new Shape(this.name, clonedCoordinates, this.color, this.orientations);
     }
 
     public ArrayList<Coordinate> getCoordinates()
@@ -47,6 +49,11 @@ public class Shape
     public String getName()
     {
         return name;
+    }
+
+    public int getOrientations()
+    {
+        return orientations;
     }
 
     private Map<String, Integer> getMostExtremePositions(ArrayList<Coordinate> positions)
@@ -171,7 +178,7 @@ public class Shape
         squareCoords.add(new Coordinate(5, 0));
         squareCoords.add(new Coordinate(4, 1));
         squareCoords.add(new Coordinate(5, 1));
-        return new Shape("Square", squareCoords, "red"); // todo: put these colors in constants?
+        return new Shape("Square", squareCoords, "red", 1); // todo: put these colors in constants?
     }
 
     public static Shape t()
@@ -181,7 +188,7 @@ public class Shape
         squareCoords.add(new Coordinate(3, 0));
         squareCoords.add(new Coordinate(5, 0));
         squareCoords.add(new Coordinate(4, 1));
-        return new Shape("T", squareCoords, "yellow");
+        return new Shape("T", squareCoords, "yellow", 4);
     }
 
     public static Shape l()
@@ -191,7 +198,7 @@ public class Shape
         squareCoords.add(new Coordinate(3, 0));
         squareCoords.add(new Coordinate(5, 0));
         squareCoords.add(new Coordinate(3, 1));
-        return new Shape("L", squareCoords, "orange");
+        return new Shape("L", squareCoords, "orange", 4);
     }
 
     public static Shape reverseL()
@@ -201,7 +208,7 @@ public class Shape
         squareCoords.add(new Coordinate(4, 0));
         squareCoords.add(new Coordinate(6, 0));
         squareCoords.add(new Coordinate(6, 1));
-        return new Shape("Reverse L", squareCoords, "green");
+        return new Shape("Reverse L", squareCoords, "green", 4);
     }
 
     public static Shape z()
@@ -211,7 +218,7 @@ public class Shape
         squareCoords.add(new Coordinate(4, 0));
         squareCoords.add(new Coordinate(5, 1));
         squareCoords.add(new Coordinate(6, 1));
-        return new Shape("Z", squareCoords, "purple");
+        return new Shape("Z", squareCoords, "purple", 2);
     }
 
     public static Shape s()
@@ -221,7 +228,7 @@ public class Shape
         squareCoords.add(new Coordinate(4, 1));
         squareCoords.add(new Coordinate(5, 0));
         squareCoords.add(new Coordinate(6, 0));
-        return new Shape("S", squareCoords, "magenta");
+        return new Shape("S", squareCoords, "magenta", 2);
     }
 
     public static Shape i()
@@ -231,6 +238,6 @@ public class Shape
         squareCoords.add(new Coordinate(3, 0));
         squareCoords.add(new Coordinate(5, 0));
         squareCoords.add(new Coordinate(6, 0));
-        return new Shape("I", squareCoords, "blue");
+        return new Shape("I", squareCoords, "blue", 2);
     }
 }

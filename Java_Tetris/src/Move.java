@@ -2,6 +2,7 @@ public class Move
 {
     public int position;
     public int orientation;
+    public int heuristicScore = Integer.MIN_VALUE;
 
     public Move(int movePosition, int moveOrientation)
     {
@@ -12,6 +13,8 @@ public class Move
     @Override
     public Move clone()
     {
-        return new Move(position, orientation);
+        Move clonedMove = new Move(position, orientation);
+        clonedMove.heuristicScore = this.heuristicScore;
+        return clonedMove;
     }
 }

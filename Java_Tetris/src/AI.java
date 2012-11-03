@@ -7,9 +7,62 @@ public class AI implements Runnable
         actualGame = gameController;
     }
 
+    private int heuristic(GameController game)
+    {
+        return game.getScore();
+    }
+
     private Move findBestMove(GameController game, int iterationLevel)
     {
         Move bestMove = new Move(0, 0);
+        for(int orientation = 0; orientation < game.getCurrentShape().getOrientations(); orientation++)
+        {
+            game.moveAllTheWay(Direction.LEFT);
+            if(orientation != 0) // no need to rotate from default orientation if already default
+            {
+                game.tryRotate();
+                game.moveAllTheWay(Direction.LEFT);
+            }
+            for(int position = 0; position < Constants.MAXX; position++)
+            {
+                if(position != 0) // same reasoning, no need to translate from default position
+                {
+                    game.tryMove(Direction.RIGHT);
+                }
+                game.moveAllTheWay(Direction.DOWN);
+                if(!game.gameOver())
+                {
+                    int thisHeuristic;
+                    if(iterationLevel > 0)
+                    {
+                        thisHeuristic = findBestMove(game, iterationLevel - 1).heuristicScore;
+                    }
+                    else
+                    {
+                        thisHeuristic = heuristic(game);
+                    }
+
+                    if(thisHeuristic > bestMove.heuristicScore)
+                    {
+                        bestMove.heuristicScore = thisHeuristic;
+                        bestMove.orientation = orientation;
+                        bestMove.position = position;
+                    }
+                }
+
+                try
+                {
+                    game.undo();
+                }
+                catch (Exception e)
+                {
+                    System.err.println("AI couldn't undo last move!");
+                    e.printStackTrace();
+                    game.output();
+                    System.err.println("Current orientation: " + orientation + ", current position: " + position);
+                }
+            }
+        }
         return bestMove;
     }
 

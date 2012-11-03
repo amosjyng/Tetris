@@ -21,6 +21,7 @@ public class Board
     @Override
     public Board clone()
     {
+        // todo: rename newBoard to clonedBoard like other classes' clone functions
         Board newBoard = new Board();
         for(int x = 0; x < max_x; x++)
         {
