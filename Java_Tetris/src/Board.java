@@ -2,16 +2,14 @@ import java.util.ArrayList;
 
 public class Board
 {
-    private int max_x = Constants.MAXX; // do we even need this max_x and max_y?
-    private int max_y = Constants.MAXY; // seems really redundant
     private ArrayList<ArrayList<String>> landed = new ArrayList<ArrayList<String>>();
 
     public Board()
     {
-        for(int x = 0; x < max_x; x++)
+        for(int x = 0; x < Constants.MAXX; x++)
         {
             landed.add(new ArrayList<String>());
-            for(int y = 0; y < max_y; y++)
+            for(int y = 0; y < Constants.MAXY; y++)
             {
                 landed.get(x).add(new String());
             }
@@ -23,9 +21,9 @@ public class Board
     {
         // todo: rename newBoard to clonedBoard like other classes' clone functions
         Board newBoard = new Board();
-        for(int x = 0; x < max_x; x++)
+        for(int x = 0; x < Constants.MAXX; x++)
         {
-            for(int y = 0; y < max_y; y++)
+            for(int y = 0; y < Constants.MAXY; y++)
             {
                 newBoard.landed.get(x).set(y, this.landed.get(x).get(y));
             }
@@ -35,9 +33,9 @@ public class Board
 
     public void output()
     {
-        for(int y = 0; y < max_y; y++)
+        for(int y = 0; y < Constants.MAXY; y++)
         {
-            for(int x = 0; x < max_x; x++)
+            for(int x = 0; x < Constants.MAXX; x++)
             {
                 String square = landed.get(x).get(y);
                 if(square.isEmpty())
@@ -61,7 +59,7 @@ public class Board
     private boolean isValid(Coordinate coordinate)
     {
         // first check if it's not out of bounds
-        if(coordinate.x < 0 || coordinate.x >= max_x || coordinate.y < 0 || coordinate.y >= max_y)
+        if(coordinate.x < 0 || coordinate.x >= Constants.MAXX || coordinate.y < 0 || coordinate.y >= Constants.MAXY)
         {
             return false;
         } // then check if it's already occupied by a spot on the board
@@ -120,12 +118,12 @@ public class Board
     {
         for(int y = row; y > 0; y--)
         {
-            for(int x = 0; x < max_x; x++)
+            for(int x = 0; x < Constants.MAXX; x++)
             {
                 landed.get(x).set(y, landed.get(x).get(y - 1));
             }
         }
-        for(int x = 0; x < max_x; x++) // clear top row
+        for(int x = 0; x < Constants.MAXX; x++) // clear top row
         {
             landed.get(0).set(x, new String());
         }
@@ -133,7 +131,7 @@ public class Board
 
     private boolean isRowFull(int row)
     {
-        for(int x = 0; x < max_x; x++)
+        for(int x = 0; x < Constants.MAXX; x++)
         {
             if(landed.get(x).get(row).isEmpty())
             {
@@ -146,7 +144,7 @@ public class Board
     public ArrayList<Integer> clearCompletedRows()
     {
         ArrayList<Integer> removedRows = new ArrayList<Integer>();
-        for(int y = 0; y < max_y; y++)
+        for(int y = 0; y < Constants.MAXY; y++)
         {
             if(isRowFull(y))
             {
@@ -164,7 +162,7 @@ public class Board
     {
         for(int i = removedRows.size() - 1; i >= 0; i--)
         {
-            for(int x = 0; x < max_x; x++)
+            for(int x = 0; x < Constants.MAXX; x++)
             {
                 for(int y = 0; y < removedRows.get(i); y++)
                 {
