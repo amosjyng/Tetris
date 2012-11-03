@@ -2,7 +2,7 @@ public class Move
 {
     public int position;
     public int orientation;
-    public int heuristicScore = Integer.MIN_VALUE;
+    public double heuristicScore = -Double.MAX_VALUE;
 
     public Move(int movePosition, int moveOrientation)
     {

@@ -7,9 +7,10 @@ public class AI implements Runnable
         actualGame = gameController;
     }
 
-    private int heuristic(GameController game)
+    private double heuristic(GameController game)
     {
-        return game.getScore();
+        return game.getScore() * Constants.GAME_SCORE_WEIGHT
+                + game.getBoard().getAverageHeight() * Constants.BOARD_HEIGHT_WEIGHT;
     }
 
     private Move findBestMove(GameController game, int iterationLevel)
@@ -32,10 +33,11 @@ public class AI implements Runnable
                 game.moveAllTheWay(Direction.DOWN);
                 if(!game.gameOver())
                 {
-                    int thisHeuristic;
+                    double thisHeuristic;
                     if(iterationLevel > 0)
                     {
-                        thisHeuristic = findBestMove(game, iterationLevel - 1).heuristicScore;
+                        thisHeuristic = findBestMove(game, iterationLevel - 1).heuristicScore
+                                            * Constants.CURRENT_MOVE_MULTIPLIER;
                     }
                     else
                     {
@@ -90,6 +92,14 @@ public class AI implements Runnable
                 }
 
                 actualGame.moveAllTheWay(Direction.DOWN);
+                try
+                {
+                    Thread.sleep(Constants.AI_PAUSE_INTERVAL);
+                }
+                catch (InterruptedException ie)
+                {
+                    ie.printStackTrace();
+                }
             }
         }
     }

@@ -56,6 +56,24 @@ public class Board
         return landed.get(x).get(y);
     }
 
+    public double getAverageHeight()
+    {
+        int cumulativeHeight = 0, totalBlocks = 0;
+        for(int x = 0; x < Constants.MAXX; x++)
+        {
+            for(int y = 0; y < Constants.MAXY; y++)
+            {
+                if(!landed.get(x).get(y).isEmpty())
+                {
+                    cumulativeHeight += Constants.MAXY - y; // positive y points downwards
+                    totalBlocks++;
+                }
+            }
+        }
+
+        return cumulativeHeight * 1.0 / totalBlocks;
+    }
+
     private boolean isValid(Coordinate coordinate)
     {
         // first check if it's not out of bounds
