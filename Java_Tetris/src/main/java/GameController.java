@@ -122,7 +122,8 @@ public class GameController
         }
         catch (Exception e)
         {
-            System.err.println("Error adding random shape: " + e);
+            System.err.println("Error adding random shape!");
+            e.printStackTrace();
             System.exit(100);
         }
     }
@@ -155,9 +156,9 @@ public class GameController
 
     private Shape popNextShapeFromQueue()
     {
+        addShapeToQueue();
         Shape shape = shapesQueue.get(0);
         shapesQueue.remove(0);
-        addShapeToQueue();
         return shape;
     }
 
