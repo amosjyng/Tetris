@@ -168,3 +168,4 @@ Java_Tetris/out
 *.orig
 *.patch
 META-INF
+target
