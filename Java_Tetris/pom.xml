@@ -1,8 +1,12 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.amosjyng</groupId>
     <artifactId>Tetris</artifactId>
     <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>Java Tetris</name>
 
     <build>
         <plugins>
@@ -22,9 +26,28 @@
                     </archive>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>Tetris</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
-        <!-- None yet -->
+        <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>jcommander</artifactId>
+            <version>1.30</version>
+        </dependency>
     </dependencies>
 </project>

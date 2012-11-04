@@ -1,3 +1,5 @@
+import com.beust.jcommander.Parameter;
+
 public class Constants
 {
     public static final int MAXX = 10;
@@ -12,7 +14,8 @@ public class Constants
     public static final String REMOVED_SQUARE_COLOR = "gray";
 
     // AI related stuff
-    public static final int AI_TRIALS = 20;
+    @Parameter(names = "--trials", description = "Number of trials to run")
+    public static int AI_TRIALS = 20;
     public static final int AI_PAUSE_INTERVAL = 0;
     public static final double CURRENT_MOVE_MULTIPLIER = 1.01; // prioritize earlier gains
     public static final double GAME_SCORE_WEIGHT = 10;
