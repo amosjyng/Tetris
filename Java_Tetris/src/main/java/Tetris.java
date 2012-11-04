@@ -7,8 +7,16 @@ class Tetris
         new JCommander(new Constants(), args);
 
         GameWindow gameWindow = new GameWindow();
-        Experimentalist experimentalist = new Experimentalist();
-        experimentalist.attach(gameWindow);
-        experimentalist.run();
+        if(Constants.RUN_AI)
+        {
+            Experimentalist experimentalist = new Experimentalist();
+            experimentalist.attach(gameWindow);
+            experimentalist.run();
+        }
+        else
+        {
+            GameController humanGame = new GameController();
+            gameWindow.attach(humanGame);
+        }
     }
 }

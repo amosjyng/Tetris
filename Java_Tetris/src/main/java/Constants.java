@@ -15,6 +15,8 @@ public class Constants
     public static final String REMOVED_SQUARE_COLOR = "gray";
 
     // AI related stuff
+    @Parameter(names = "--ai", description = "Run AI, or let human user play?")
+    public static boolean RUN_AI = false;
     @Parameter(names = "--trials", description = "Number of trials to run")
     public static int AI_TRIALS = 20;
     public static final int AI_PAUSE_INTERVAL = 0;
