@@ -1,5 +1,7 @@
 import com.beust.jcommander.Parameter;
 
+import java.util.Random;
+
 public class Constants
 {
     public static final int MAXX = 10;
@@ -9,6 +11,9 @@ public class Constants
     public static final int MAX_LEVELS = 10;
     public static final boolean LINEAR_SCORE_FUNCTION = true;
     public static final int SCORE_MULTIPLIER = 1; // make people happier, I guess
+    @Parameter(names = "--seed", description = "Random number generator seed")
+    public static int seed = 0;
+    public static Random random = new Random();
 
     // UI-related stuff
     public static final int SQUARE_SIZE = 20;

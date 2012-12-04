@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class Shape
 {
@@ -9,8 +8,6 @@ public class Shape
     private String color;
     private String name;
     private int orientations;
-
-    private static Random random = new Random();
 
     public Shape(String shapeName, ArrayList<Coordinate> coords, String initColor, int numberOrientations)
     {
@@ -149,7 +146,7 @@ public class Shape
 
     public static Shape randomShape() throws Exception // note: is a switch statement really the best way to do this?
     {
-        switch (random.nextInt(7))
+        switch (Constants.random.nextInt(7))
         {
             case 0:
                 return square();

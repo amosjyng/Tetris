@@ -170,3 +170,4 @@ Java_Tetris/out
 META-INF
 target
 *.iml
+*.xls*
