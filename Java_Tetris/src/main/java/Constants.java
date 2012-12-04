@@ -14,6 +14,8 @@ public class Constants
     @Parameter(names = "--seed", description = "Random number generator seed")
     public static int seed = 0;
     public static Random random = new Random();
+    @Parameter(names = {"--help", "-h"}, help = true, description = "Display this help message")
+    public static boolean help;
 
     // UI-related stuff
     public static final int SQUARE_SIZE = 20;
