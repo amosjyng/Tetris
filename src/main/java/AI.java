@@ -1,4 +1,6 @@
-public class AI implements Runnable
+import java.util.concurrent.Callable;
+
+public class AI implements Callable
 {
     private GameController actualGame;
     private Options options;
@@ -76,11 +78,13 @@ public class AI implements Runnable
     }
 
     @Override
-    public void run()
+    public Integer call()
     {
         if(actualGame == null)
         {
             System.err.println("Can't run AI; actual game not set yet!");
+            System.exit(300);
+            return -1;
         }
         else
         {
@@ -121,6 +125,8 @@ public class AI implements Runnable
 
                 movesMade++;
             }
+
+            return actualGame.getScore();
         }
     }
 }

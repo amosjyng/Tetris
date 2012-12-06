@@ -1,13 +1,12 @@
-import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class Experimentalist implements Runnable
 {
     private GameWindow gameWindow;
     ArrayList<GameController> games = new ArrayList<GameController>();
     private ExecutorService es = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    ArrayList<Callable<Integer>> tasks = new ArrayList<Callable<Integer>>();
 
     public void attach(GameWindow newGameWindow)
     {
@@ -28,12 +27,12 @@ public class Experimentalist implements Runnable
     {
         AI ai = setUpGame(options);
         gameWindow.attach(games.get(games.size() - 1));
-        ai.run();
+        ai.call();
     }
 
     private void addGameToPlay(Options options)
     {
-        es.execute(setUpGame(options));
+        tasks.add(setUpGame(options));
     }
 
     private void analyzeData(ArrayList<Integer> results)
@@ -56,20 +55,23 @@ public class Experimentalist implements Runnable
         }
         gameWindow.attach(games.get(0)); // this will get boring after the first game
 
-        es.shutdown();
         try
         {
-            es.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+            List<Future<Integer>> futures = es.invokeAll(tasks);
+            for(Future<Integer> future : futures)
+            {
+                trialResults.add(future.get());
+            }
         }
         catch (InterruptedException ie)
         {
             System.err.println("Could not wait for threads to end!");
             ie.printStackTrace();
         }
-
-        for(GameController game : games)
+        catch (ExecutionException ee)
         {
-            trialResults.add(game.getScore());
+            System.err.println("Error playing game!");
+            ee.printStackTrace();
         }
 
         analyzeData(trialResults);
