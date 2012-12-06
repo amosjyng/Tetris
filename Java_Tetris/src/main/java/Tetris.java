@@ -28,7 +28,7 @@ class Tetris
             }
             else
             {
-                GameController humanGame = new GameController();
+                GameController humanGame = new GameController(new Constants().SHAPES_QUEUE_SIZE);
                 gameWindow.attach(humanGame);
             }
         }

@@ -1,6 +1,12 @@
 public class AI implements Runnable
 {
     private GameController actualGame;
+    private Constants constants;
+
+    public AI(Constants newConstants)
+    {
+        constants = newConstants;
+    }
 
     public void attach(GameController gameController)
     {
@@ -10,8 +16,8 @@ public class AI implements Runnable
     private double heuristic(GameController game)
     {
         return game.getScore() * Constants.GAME_SCORE_WEIGHT
-                + game.getBoard().getAverageHeight() * Constants.BOARD_HEIGHT_WEIGHT
-                + game.getBoard().getOverhangCount() * Constants.BOARD_OVERHANGS_WEIGHT;
+                + game.getBoard().getAverageHeight() * constants.BOARD_HEIGHT_WEIGHT
+                + game.getBoard().getOverhangCount() * constants.BOARD_OVERHANGS_WEIGHT;
     }
 
     private Move findBestMove(GameController game, int iterationLevel)
@@ -78,9 +84,20 @@ public class AI implements Runnable
         }
         else
         {
-            while(!actualGame.gameOver())
+            int movesMade = 0;
+            while(movesMade < constants.MAX_MOVES && !actualGame.gameOver())
             {
-                Move bestMove = findBestMove(actualGame.clone(), Constants.SHAPES_QUEUE_SIZE);
+                Move bestMove;
+                int movesLeft = constants.MAX_MOVES - movesMade;
+                if(!constants.EXACT_SEARCH || movesLeft > constants.SHAPES_QUEUE_SIZE)
+                {
+                    bestMove = findBestMove(actualGame.clone(), constants.SHAPES_QUEUE_SIZE);
+                }
+                else
+                {
+                    // subtract 1 from movesLeft because findBestMove only stops when iterationLevel is < 0
+                    bestMove = findBestMove(actualGame.clone(), movesLeft - 1);
+                }
                 actualGame.moveAllTheWay(Direction.LEFT);
                 for(int i = 0; i < bestMove.orientation; i++)
                 {
@@ -101,6 +118,8 @@ public class AI implements Runnable
                 {
                     ie.printStackTrace();
                 }
+
+                movesMade++;
             }
         }
     }
