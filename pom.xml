@@ -3,7 +3,7 @@
 
     <groupId>com.amosjyng</groupId>
     <artifactId>Tetris</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <packaging>jar</packaging>
 
     <name>Java Tetris</name>
@@ -55,6 +55,11 @@
             <groupId>com.beust</groupId>
             <artifactId>jcommander</artifactId>
             <version>1.30</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jgap</groupId>
+            <artifactId>jgap</artifactId>
+            <version>3.4.4</version>
         </dependency>
     </dependencies>
 </project>

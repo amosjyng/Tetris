@@ -1,3 +1,5 @@
+import org.jgap.IChromosome;
+
 import java.util.Random;
 
 public class Options
@@ -6,11 +8,16 @@ public class Options
     public Random random;
     public int maxMoves = Integer.MAX_VALUE;
     public boolean exactSearch = false;
-    public double gameScoreWeight = 10;
-    public double boardHeightWeight = -5;
-    public double boardOverhangsWeight = -10;
+    public double gameScoreWeight = Constants.DEFAULT_GAME_SCORE_WEIGHT;
+    public double boardHeightWeight = Constants.DEFAULT_BOARD_HEIGHT_WEIGHT;
+    public double boardOverhangsWeight = Constants.DEFAULT_BOARD_OVERHANG_WEIGHT;
 
     public Options()
+    {
+        this(null);
+    }
+
+    public Options(IChromosome chromosome)
     {
         if(Constants.seed == 0)
         {
@@ -19,6 +26,13 @@ public class Options
         else
         {
             random = new Random(Constants.seed);
+        }
+
+        if(chromosome != null)
+        {
+            gameScoreWeight = (Integer) chromosome.getGene(0).getAllele();
+            boardHeightWeight = (Integer) chromosome.getGene(1).getAllele();
+            boardOverhangsWeight = (Integer) chromosome.getGene(2).getAllele();
         }
     }
 
@@ -34,5 +48,12 @@ public class Options
         clonedOptions.boardOverhangsWeight = this.boardOverhangsWeight;
         
         return clonedOptions;
+    }
+
+    public void print()
+    {
+        System.out.println("Game score weight: " + gameScoreWeight);
+        System.out.println("Board height weight: " + boardHeightWeight);
+        System.out.println("Board overhang weight: " + boardOverhangsWeight);
     }
 }

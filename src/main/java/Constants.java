@@ -28,8 +28,17 @@ public class Constants
     // AI related stuff
     @Parameter(names = "--ai", description = "Run AI, or let human user play?")
     public static boolean RUN_AI = false;
+    @Parameter(names = "--genetic", description = "Use genetic algorithms to determine best weights")
+    public static boolean USE_GA = false;
     @Parameter(names = "--trials", description = "Number of trials to run")
-    public static int AI_TRIALS = 20;
+    public static int AI_TRIALS = 10;
     public static final int AI_PAUSE_INTERVAL = 0;
     public static final double CURRENT_MOVE_MULTIPLIER = 1.01; // prioritize earlier gains
+    public static double DEFAULT_GAME_SCORE_WEIGHT = 10;
+    public static double DEFAULT_BOARD_HEIGHT_WEIGHT = -5;
+    public static double DEFAULT_BOARD_OVERHANG_WEIGHT = -10;
+    @Parameter(names = {"--population", "--pop"}, description = "Population size to use for genetic algorithm")
+    public static int POPULATION = 10;
+    @Parameter(names = "--evolutions", description = "Maximum number of evolutions to run GA for")
+    public static int MAX_EVOLUTIONS = 10;
 }

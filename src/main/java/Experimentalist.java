@@ -35,7 +35,7 @@ public class Experimentalist implements Runnable
         tasks.add(setUpGame(options));
     }
 
-    private void analyzeData(ArrayList<Integer> results)
+    private double analyzeData(ArrayList<Integer> results)
     {
         int trialSum = 0;
         for(int result : results)
@@ -43,24 +43,42 @@ public class Experimentalist implements Runnable
             trialSum += result;
         }
 
-        System.out.println("Average score was: " + trialSum * 1.0 / results.size());
+        double average = trialSum * 1.0 / results.size();
+        System.out.println("Average score was: " + average);
+
+        return average;
     }
 
-    private void runNormalTrials()
+    public double runNormalTrials(Options options)
     {
         ArrayList<Integer> trialResults = new ArrayList<Integer>();
         for(int i = 0; i < Constants.AI_TRIALS; i++)
         {
-            addGameToPlay(new Options());
+            addGameToPlay(options.clone());
         }
-        gameWindow.attach(games.get(0)); // this will get boring after the first game
+
+        if(gameWindow != null)
+        {
+            gameWindow.attach(games.get(0)); // this will get boring after the first game
+        }
 
         try
         {
-            List<Future<Integer>> futures = es.invokeAll(tasks);
-            for(Future<Integer> future : futures)
+            if(!Constants.USE_GA)
             {
-                trialResults.add(future.get());
+                List<Future<Integer>> futures = es.invokeAll(tasks);
+                for(Future<Integer> future : futures)
+                {
+                    trialResults.add(future.get());
+                }
+            }
+            else
+            {
+                // apparently there are some problems with using JGAP and multithreading...
+                for(Callable<Integer> task : tasks)
+                {
+                    trialResults.add(task.call());
+                }
             }
         }
         catch (InterruptedException ie)
@@ -73,8 +91,13 @@ public class Experimentalist implements Runnable
             System.err.println("Error playing game!");
             ee.printStackTrace();
         }
+        catch (Exception e)
+        {
+            System.err.println("Error completing a game!");
+            e.printStackTrace();
+        }
 
-        analyzeData(trialResults);
+        return analyzeData(trialResults);
     }
 
     private void runExactTrials()
@@ -114,7 +137,7 @@ public class Experimentalist implements Runnable
         }
         else
         {
-            runNormalTrials();
+            runNormalTrials(new Options());
         }
     }
 }
