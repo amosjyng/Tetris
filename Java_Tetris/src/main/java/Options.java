@@ -21,4 +21,18 @@ public class Options
             random = new Random(Constants.seed);
         }
     }
+
+    @Override
+    public Options clone()
+    {
+        Options clonedOptions = new Options();
+        clonedOptions.shapesQueueSize = this.shapesQueueSize;
+        clonedOptions.maxMoves = this.maxMoves;
+        clonedOptions.exactSearch = this.exactSearch;
+        clonedOptions.gameScoreWeight = this.gameScoreWeight;
+        clonedOptions.boardHeightWeight = this.boardHeightWeight;
+        clonedOptions.boardOverhangsWeight = this.boardOverhangsWeight;
+        
+        return clonedOptions;
+    }
 }

@@ -33,7 +33,7 @@ public class GameController
     @Override
     public GameController clone()
     {
-        GameController clonedGame = new GameController(options);
+        GameController clonedGame = new GameController(options.clone());
         clonedGame.score = this.score;
         clonedGame.level = this.level;
         clonedGame.board = this.board.clone();
