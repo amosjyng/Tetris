@@ -27,9 +27,9 @@ class Tetris
                         configuration.setFitnessFunction(new ScoreFitnessFunction());
 
                         Gene[] genes = new Gene[3];
-                        genes[0] = new DoubleGene(configuration, 0, Constants.DEFAULT_GAME_SCORE_WEIGHT);
-                        genes[1] = new DoubleGene(configuration, 1, Constants.DEFAULT_BOARD_HEIGHT_WEIGHT);
-                        genes[2] = new DoubleGene(configuration, 2, Constants.DEFAULT_BOARD_OVERHANG_WEIGHT);
+                        genes[0] = new DoubleGene(configuration, 0, 100);
+                        genes[1] = new DoubleGene(configuration, -100, 0);
+                        genes[2] = new DoubleGene(configuration, -100, 0);
 
                         Chromosome chromosome = new Chromosome(configuration, genes);
                         configuration.setSampleChromosome(chromosome);

@@ -30,9 +30,9 @@ public class Options
 
         if(chromosome != null)
         {
-            gameScoreWeight = (Integer) chromosome.getGene(0).getAllele();
-            boardHeightWeight = (Integer) chromosome.getGene(1).getAllele();
-            boardOverhangsWeight = (Integer) chromosome.getGene(2).getAllele();
+            gameScoreWeight = (Double) chromosome.getGene(0).getAllele();
+            boardHeightWeight = (Double) chromosome.getGene(1).getAllele();
+            boardOverhangsWeight = (Double) chromosome.getGene(2).getAllele();
         }
     }
 
