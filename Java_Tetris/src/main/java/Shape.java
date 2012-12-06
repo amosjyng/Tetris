@@ -131,19 +131,6 @@ public class Shape
         return rotatedCoordinates; // otherwise we're done!
     }
 
-    public void translate(Direction direction)
-    {
-        for(int i = 0; i < coordinates.size(); i++)
-        {
-            /*
-            note: should I implement an actual translate function in Coordinate that actually modifies the Coordinate
-            instead of creating another copy of the coordinate? Could this prevent messy issues later on with cloning
-            a Shape?
-             */
-            coordinates.set(i, coordinates.get(i).translate(direction));
-        }
-    }
-
     public static Shape randomShape() throws Exception // note: is a switch statement really the best way to do this?
     {
         switch (Constants.random.nextInt(7))
@@ -163,7 +150,7 @@ public class Shape
             case 6:
                 return i();
             default:
-                throw new Exception("Generated random integer outside of range 0 - 7");
+                throw new Exception("Generated random integer outside of range 0 - 6");
         }
     }
 

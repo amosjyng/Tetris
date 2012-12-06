@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Map;
 
 public class GameController
 {
@@ -53,9 +52,8 @@ public class GameController
     {
         System.out.println("Current shape is a(n) " + currentShape.getName());
         System.out.print("Next shapes in queue are: ");
-        for(int i = 0; i < shapesQueue.size(); i++)
-        {
-            System.out.print("a " + shapesQueue.get(i).getName());
+        for (Shape shape : shapesQueue) {
+            System.out.print("a " + shape.getName());
         }
         System.out.println();
         board.output();
@@ -127,6 +125,10 @@ public class GameController
         try
         {
             shapesQueue.add(Shape.randomShape());
+            if(!Constants.RUN_AI)
+            {
+                System.out.println("Next shape added to queue is " + shapesQueue.get(shapesQueue.size() - 1).getName());
+            }
         }
         catch (Exception e)
         {

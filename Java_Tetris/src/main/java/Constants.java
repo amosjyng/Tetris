@@ -5,6 +5,10 @@ import java.util.Random;
 public class Constants
 {
     // todo: refactor non-static variables into new class "Options," because they aren't really "Constant"?
+    public Constants()
+    {
+        SHAPES_QUEUE_SIZE = DEFAULT_SHAPES_QUEUE_SIZE;
+    }
 
     // program related stuff
     @Parameter(names = {"--help", "-h"}, help = true, description = "Display this help message")

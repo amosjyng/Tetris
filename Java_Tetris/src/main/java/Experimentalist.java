@@ -20,7 +20,6 @@ public class Experimentalist implements Runnable
         if(constants == null)
         {
             constants = new Constants();
-            constants.SHAPES_QUEUE_SIZE = Constants.DEFAULT_SHAPES_QUEUE_SIZE;
         }
         GameController game = new GameController(constants.SHAPES_QUEUE_SIZE);
         games.add(game);
@@ -32,7 +31,9 @@ public class Experimentalist implements Runnable
 
     private void playGame(Constants constants)
     {
-        setUpGame(constants).run();
+        AI ai = setUpGame(constants);
+        gameWindow.attach(games.get(games.size() - 1));
+        ai.run();
     }
 
     private void addGameToPlay(Constants constants)
@@ -84,10 +85,10 @@ public class Experimentalist implements Runnable
         Constants optimalPlayConstant = new Constants();
         optimalPlayConstant.BOARD_HEIGHT_WEIGHT = 0;
         optimalPlayConstant.BOARD_OVERHANGS_WEIGHT = 0;
-        optimalPlayConstant.SHAPES_QUEUE_SIZE = Constants.DEFAULT_SHAPES_QUEUE_SIZE;
         int maxMoves = Constants.DEFAULT_SHAPES_QUEUE_SIZE + 1;
         optimalPlayConstant.MAX_MOVES = maxMoves;
         optimalPlayConstant.EXACT_SEARCH = true;
+        Constants.random = new Random(Constants.seed);
         playGame(optimalPlayConstant);
         System.out.println("Optimal play gave a score of " + games.get(0).getScore() + ":");
         games.get(0).getBoard().output();
