@@ -164,7 +164,7 @@ pip-log.txt
 .DS_Store
 
 profiler
-Java_Tetris/out
+out
 *.orig
 *.patch
 META-INF
