@@ -13,17 +13,17 @@ public class GameController
     private boolean gameOver = false;
     private ArrayList<UndoInformation> undoInformation = new ArrayList<UndoInformation>();
     private boolean underSimulation = false;
-    private int shapesQueueSize;
+    private Options options;
 
-    public GameController(int queueSize)
+    public GameController(Options newOptions)
     {
-        shapesQueueSize = queueSize;
+        options = newOptions;
 
         for(int i = 1; i < Constants.MAX_LEVELS; i++)
         {
             levelThresholds.add((int) Math.pow(2, (double) i) * Constants.SCORE_MULTIPLIER);
         }
-        for(int i = 0; i < shapesQueueSize; i++)
+        for(int i = 0; i < options.shapesQueueSize; i++)
         {
             addShapeToQueue();
         }
@@ -33,7 +33,7 @@ public class GameController
     @Override
     public GameController clone()
     {
-        GameController clonedGame = new GameController(shapesQueueSize);
+        GameController clonedGame = new GameController(options);
         clonedGame.score = this.score;
         clonedGame.level = this.level;
         clonedGame.board = this.board.clone();
@@ -61,7 +61,7 @@ public class GameController
 
     public int getShapesQueueSize()
     {
-        return shapesQueueSize;
+        return options.shapesQueueSize;
     }
 
     public int getScore()
@@ -124,7 +124,7 @@ public class GameController
     {
         try
         {
-            shapesQueue.add(Shape.randomShape());
+            shapesQueue.add(Shape.randomShape(options.random));
             if(!Constants.RUN_AI)
             {
                 System.out.println("Next shape added to queue is " + shapesQueue.get(shapesQueue.size() - 1).getName());

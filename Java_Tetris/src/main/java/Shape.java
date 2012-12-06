@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Shape
 {
@@ -131,9 +132,10 @@ public class Shape
         return rotatedCoordinates; // otherwise we're done!
     }
 
-    public static Shape randomShape() throws Exception // note: is a switch statement really the best way to do this?
+    // note: is a switch statement really the best way to do this?
+    public static Shape randomShape(Random random) throws Exception
     {
-        switch (Constants.random.nextInt(7))
+        switch (random.nextInt(7))
         {
             case 0:
                 return square();

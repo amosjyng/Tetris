@@ -1,11 +1,11 @@
 public class AI implements Runnable
 {
     private GameController actualGame;
-    private Constants constants;
+    private Options options;
 
-    public AI(Constants newConstants)
+    public AI(Options newOptions)
     {
-        constants = newConstants;
+        options = newOptions;
     }
 
     public void attach(GameController gameController)
@@ -15,9 +15,9 @@ public class AI implements Runnable
 
     private double heuristic(GameController game)
     {
-        return game.getScore() * Constants.GAME_SCORE_WEIGHT
-                + game.getBoard().getAverageHeight() * constants.BOARD_HEIGHT_WEIGHT
-                + game.getBoard().getOverhangCount() * constants.BOARD_OVERHANGS_WEIGHT;
+        return game.getScore() * options.gameScoreWeight
+                + game.getBoard().getAverageHeight() * options.boardHeightWeight
+                + game.getBoard().getOverhangCount() * options.boardOverhangsWeight;
     }
 
     private Move findBestMove(GameController game, int iterationLevel)
@@ -85,13 +85,13 @@ public class AI implements Runnable
         else
         {
             int movesMade = 0;
-            while(movesMade < constants.MAX_MOVES && !actualGame.gameOver())
+            while(movesMade < options.maxMoves && !actualGame.gameOver())
             {
                 Move bestMove;
-                int movesLeft = constants.MAX_MOVES - movesMade;
-                if(!constants.EXACT_SEARCH || movesLeft > constants.SHAPES_QUEUE_SIZE)
+                int movesLeft = options.maxMoves - movesMade;
+                if(!options.exactSearch || movesLeft > options.shapesQueueSize)
                 {
-                    bestMove = findBestMove(actualGame.clone(), constants.SHAPES_QUEUE_SIZE);
+                    bestMove = findBestMove(actualGame.clone(), options.shapesQueueSize);
                 }
                 else
                 {

@@ -14,11 +14,6 @@ class Tetris
         }
         else
         {
-            if(Constants.seed != 0)
-            {
-                Constants.random = new Random(Constants.seed);
-            }
-
             GameWindow gameWindow = new GameWindow();
             if(Constants.RUN_AI)
             {
@@ -28,7 +23,7 @@ class Tetris
             }
             else
             {
-                GameController humanGame = new GameController(new Constants().SHAPES_QUEUE_SIZE);
+                GameController humanGame = new GameController(new Options());
                 gameWindow.attach(humanGame);
             }
         }
