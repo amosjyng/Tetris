@@ -34,9 +34,12 @@ public class Constants
     public static int AI_TRIALS = 10;
     public static final int AI_PAUSE_INTERVAL = 0;
     public static final double CURRENT_MOVE_MULTIPLIER = 1.01; // prioritize earlier gains
-    public static double DEFAULT_GAME_SCORE_WEIGHT = 10;
-    public static double DEFAULT_BOARD_HEIGHT_WEIGHT = -5;
-    public static double DEFAULT_BOARD_OVERHANG_WEIGHT = -10;
+    @Parameter(names = "--score_weight", description = "How much the AI should reward a higher game score")
+    public static double DEFAULT_GAME_SCORE_WEIGHT = 64.887186;
+    @Parameter(names = "--height_weight", description = "How much the AI should reward greater overall height")
+    public static double DEFAULT_BOARD_HEIGHT_WEIGHT = -94.354300;
+    @Parameter(names = "--overhang_weight", description = "How much the AI should reward overhangs")
+    public static double DEFAULT_BOARD_OVERHANG_WEIGHT = -4.543045;
     @Parameter(names = {"--population", "--pop"}, description = "Population size to use for genetic algorithm")
     public static int POPULATION = 10;
     @Parameter(names = "--evolutions", description = "Maximum number of evolutions to run GA for")
