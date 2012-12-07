@@ -16,7 +16,11 @@ class Tetris
         }
         else
         {
-            GameWindow gameWindow = new GameWindow();
+            GameWindow gameWindow = null;
+            if(!Constants.NO_GUI)
+            {
+                gameWindow = new GameWindow();
+            }
             if(Constants.RUN_AI)
             {
                 System.out.println(Runtime.getRuntime().availableProcessors() + " cores detected.");

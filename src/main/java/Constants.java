@@ -11,6 +11,8 @@ public class Constants
     public static int seed = 0;
     @Parameter(names = "--exact", description = "Perform an exact search for optimal play")
     public static boolean exact;
+    @Parameter(names = "--no-gui", description = "Don't use a GUI (when running AI)")
+    public static boolean NO_GUI = false;
 
     // actual Tetris related stuff
     public static final int MAXX = 10;

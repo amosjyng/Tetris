@@ -26,7 +26,10 @@ public class Experimentalist implements Runnable
     private void playGame(Options options)
     {
         AI ai = setUpGame(options);
-        gameWindow.attach(games.get(games.size() - 1));
+        if(gameWindow != null)
+        {
+            gameWindow.attach(games.get(games.size() - 1));
+        }
         ai.call();
     }
 
