@@ -19,6 +19,8 @@ class Tetris
             GameWindow gameWindow = new GameWindow();
             if(Constants.RUN_AI)
             {
+                System.out.println(Runtime.getRuntime().availableProcessors() + " cores detected.");
+
                 if(Constants.USE_GA)
                 {
                     Configuration configuration = new DefaultConfiguration();

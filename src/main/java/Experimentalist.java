@@ -64,21 +64,10 @@ public class Experimentalist implements Runnable
 
         try
         {
-            if(!Constants.USE_GA)
+            List<Future<Integer>> futures = es.invokeAll(tasks);
+            for(Future<Integer> future : futures)
             {
-                List<Future<Integer>> futures = es.invokeAll(tasks);
-                for(Future<Integer> future : futures)
-                {
-                    trialResults.add(future.get());
-                }
-            }
-            else
-            {
-                // apparently there are some problems with using JGAP and multithreading...
-                for(Callable<Integer> task : tasks)
-                {
-                    trialResults.add(task.call());
-                }
+                trialResults.add(future.get());
             }
         }
         catch (InterruptedException ie)

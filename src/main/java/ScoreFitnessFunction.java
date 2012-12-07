@@ -7,6 +7,9 @@ public class ScoreFitnessFunction extends FitnessFunction
     public double evaluate(IChromosome chromosome)
     {
         Experimentalist experimentalist = new Experimentalist();
-        return experimentalist.runNormalTrials(new Options(chromosome));
+        Options chromosomeOptions = new Options(chromosome);
+        System.out.println("Now evaluating fitness of chromosome:");
+        chromosomeOptions.print();
+        return experimentalist.runNormalTrials(chromosomeOptions);
     }
 }
