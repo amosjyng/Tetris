@@ -124,6 +124,11 @@ public class AI implements Callable
                 }
 
                 movesMade++;
+
+                if(Constants.NO_GUI && movesMade % 1000 == 0)
+                {
+                    System.out.println("Score is now " + actualGame.getScore() + " on the " + movesMade + "th move");
+                }
             }
 
             return actualGame.getScore();
