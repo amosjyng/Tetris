@@ -2,8 +2,6 @@ import com.beust.jcommander.Parameter;
 
 public class Constants
 {
-    // todo: refactor non-static variables into new class "Options," because they aren't really "Constant"?
-
     // program related stuff
     @Parameter(names = {"--help", "-h"}, help = true, description = "Display this help message")
     public static boolean help;
